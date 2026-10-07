@@ -12,15 +12,55 @@ supervised fine-tuning on a local GPU, evaluation against real databases, and ex
 > code next to its result. See [Limitations](#limitations).
 
 ## Contents
-1. [Results at a glance](#results-at-a-glance)
-2. [Model architecture](#model-architecture)
-3. [The pipeline end to end](#the-pipeline-end-to-end)
-4. [How the model is used (the agent loop)](#how-the-model-is-used-the-agent-loop)
-5. [Cost and time](#cost-and-time)
-6. [Repository layout](#repository-layout)
-7. [Quick start](#quick-start)
-8. [Limitations](#limitations)
-9. [Documentation map](#documentation-map)
+1. [The project at a glance](#the-project-at-a-glance)
+2. [Results at a glance](#results-at-a-glance)
+3. [Model architecture](#model-architecture)
+4. [The pipeline end to end](#the-pipeline-end-to-end)
+5. [How the model is used (the agent loop)](#how-the-model-is-used-the-agent-loop)
+6. [Cost and time](#cost-and-time)
+7. [Repository layout](#repository-layout)
+8. [Quick start](#quick-start)
+9. [Limitations](#limitations)
+10. [Documentation map](#documentation-map)
+
+## The project at a glance
+
+These are screenshots of the playground (`python -m viki_slm_125m.app.ui_server`), which presents the same figures as
+this README. They are in `docs/images/`.
+
+![Viki SLM 125M playground header: a 125M-parameter Python and SQL coding model, 124.3M parameters, 7.5B tokens seen, 32,768 BPE vocabulary, 8 x H100 pretraining, 124K SFT examples](docs/images/hero.png)
+
+**The numbers: what it took to build.** 124,275,456 parameters; 7.5B pretraining tokens; **$40.83** cloud cost for
+data processing plus pretraining ($11.37 data processing, $29.46 GPU, of which the epoch-1 run was $25.86); 123,655
+fine-tuning examples over 3 epochs and 2,040 steps at no cost on a local GPU; base-model validation loss 0.70 on SQL and
+1.29 on Python.
+
+![The numbers: parameters 124.3M, pretraining tokens 7.5B, cloud cost $40.83, SFT 123,655 examples, SFT cost $0, validation loss 0.70 / 1.29](docs/images/numbers.png)
+
+**Evaluation: how well it works.** Spider dev 33.0% with voting (22.1% without); open-ended SQL on unseen domains
+58.0% (60.2% with voting); held-out finance and supply-chain SQL 61.4% (first four templates 89%, three newer and
+harder ones 24%); pandas 100% and refusal/clarify/missing-data 100% on question styles it trained on; chat and open
+coding help are weak.
+
+![Evaluation: Spider dev 33.0%, open-ended SQL 58.0%, held-out finance and supply-chain SQL 61.4%, Python pandas 100%, refusal 100%, chat weak](docs/images/evaluation.png)
+
+**Architecture and data.** A 12-layer, 768-wide Llama-style decoder with 2,560-wide SwiGLU feed-forward blocks, 2,048
+context, 32,768-token BPE vocabulary, RoPE and tied embeddings in bfloat16. The pretraining mix is Python 35.6%,
+FineWeb-edu 21.4%, SQL 12.3%, notebooks 10.2%, finance filings 8.0%, Cosmopedia 6.9% and math 5.6% (7.03B unique
+tokens, no supply-chain text).
+
+![Architecture and data: model settings table and the pretraining data mix bar with throughput of about 3.2M tokens per second](docs/images/architecture-and-data.png)
+
+**The playground.** Pick a mode (SQL, Python on data, chat), click a sample or write a question, and the generated SQL
+or code runs for real; the page shows the code, the result table, the model's explanation and how many of the sampled
+queries agreed.
+
+![The playground answering "How many customers are in each segment?" with the generated SQL, the vote (9 of 9 candidates), the 4-row result table and the insight](docs/images/playground.png)
+
+*Read the example critically.* The SQL and table are correct, but the insight names the wrong group for the smallest
+count ("lowest for Corporate (1)": the table shows SME has 1 and Corporate has 6). The faithfulness score (99.5%) checks
+that the numbers in an insight appear in the result, not that the right names are attached to them, so it cannot catch
+this. Always read the table, not just the sentence.
 
 ---
 

@@ -47,7 +47,10 @@ column for v5 was measured before that fix.
    not prove generality.
 4. **Voting helps when mistakes are random** (+4 points on gretel, +7.7 on Spider for v4) **and not when they are
    systematic** (for v5 it added nothing on the held-out templates because every sample repeats the same error).
-5. **Noise.** Per-template scores rest on 60 questions; Spider validation loss on 10 databases. Differences of one or two
+5. **The faithfulness score is narrower than its name.** It checks that every number in an insight appears in the result.
+   It does not check that the right name is attached to a number: in the README's playground example the insight says the
+   smallest group is "Corporate (1)" when the table shows it is SME. A name-aware check would be a useful next metric.
+6. **Noise.** Per-template scores rest on 60 questions; Spider validation loss on 10 databases. Differences of one or two
    points between versions are not meaningful.
 
 ## What was not evaluated
