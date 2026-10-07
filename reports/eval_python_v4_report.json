@@ -1,0 +1,506 @@
+{
+  "summary": {
+    "checkpoint": "artifacts/sft_v4/best.pt",
+    "n": 58,
+    "execution_accuracy": 1.0,
+    "runs_rate": 1.0,
+    "strict_format_rate": 1.0,
+    "by_template": {
+      "py_spend_supplier": 1.0,
+      "py_late_rate": 1.0,
+      "py_avg_cost_category": 1.0,
+      "py_forecast_bias": 1.0,
+      "py_monthly_orders": 1.0,
+      "py_stock_warehouse": 1.0,
+      "py_qty_outliers": 1.0,
+      "py_price_qty_corr": 1.0,
+      "py_balance_type": 1.0,
+      "py_monthly_credits": 1.0,
+      "py_top_customers": 1.0,
+      "py_weighted_rate": 1.0,
+      "py_late_payments": 1.0,
+      "py_channel_share": 1.0,
+      "py_large_txn": 1.0,
+      "py_spend_category": 1.0,
+      "py_avg_order_value_status": 1.0,
+      "py_freight_carrier": 1.0,
+      "py_lead_time_country": 1.0,
+      "py_orders_by_status": 1.0,
+      "py_inventory_value": 1.0,
+      "py_monthly_spend": 1.0,
+      "py_txn_type_total": 1.0,
+      "py_loan_status_count": 1.0,
+      "py_avg_principal_status": 1.0,
+      "py_monthly_debits": 1.0,
+      "py_segment_count": 1.0,
+      "py_net_gl_center": 1.0,
+      "py_late_rate_loan_status": 1.0
+    }
+  },
+  "records": [
+    {
+      "template": "py_spend_supplier",
+      "question": "Calculate the total spend (quantity x unit_price) for each supplier_id and show the top 10.",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\npo['spend'] = po['quantity'] * po['unit_price']\nres = po.groupby('supplier_id', as_index=False)['spend'].sum().round(2).sort_values('spend', ascending=False).head(10)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_spend_supplier",
+      "question": "Calculate the total spend (quantity x unit_price) for each supplier_id and show the top 5.",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\npo['spend'] = po['quantity'] * po['unit_price']\nres = po.groupby('supplier_id', as_index=False)['spend'].sum().round(2).sort_values('spend', ascending=False).head(5)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_late_rate",
+      "question": "For received orders, what percentage were late for each supplier_id? Show the 10 worst.",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv', parse_dates=['promised_date', 'received_date'])\nrec = po[po['status'] == 'received'].copy()\nrec['late'] = rec['received_date'] > rec['promised_date']\nres = rec.groupby('supplier_id', as_index=False)['late'].mean()\nres['late_pct'] = (res['late'] * 100).round(1)\nres = res[['supplier_id', 'late_pct']].sort_values('late_pct', ascending=False).head(10)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_late_rate",
+      "question": "For received orders, what percentage were late for each supplier_id? Show the 5 worst.",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv', parse_dates=['promised_date', 'received_date'])\nrec = po[po['status'] == 'received'].copy()\nrec['late'] = rec['received_date'] > rec['promised_date']\nres = rec.groupby('supplier_id', as_index=False)['late'].mean()\nres['late_pct'] = (res['late'] * 100).round(1)\nres = res[['supplier_id', 'late_pct']].sort_values('late_pct', ascending=False).head(5)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_avg_cost_category",
+      "question": "What is the average unit cost per product category?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nproducts = pd.read_csv('products.csv')\nres = products.groupby('category', as_index=False)['unit_cost'].mean().round(2).sort_values('unit_cost', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_avg_cost_category",
+      "question": "What is the average unit cost per product category?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nproducts = pd.read_csv('products.csv')\nres = products.groupby('category', as_index=False)['unit_cost'].mean().round(2).sort_values('unit_cost', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_forecast_bias",
+      "question": "Compute the average forecast bias (actual minus forecast) for each product_id and show the 10 most under-forecast.",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nf = pd.read_csv('demand_forecast.csv')\nf['bias'] = f['actual_units'] - f['forecast_units']\nres = f.groupby('product_id', as_index=False)['bias'].mean().round(1).sort_values('bias', ascending=False).head(10)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_forecast_bias",
+      "question": "Compute the average forecast bias (actual minus forecast) for each product_id and show the 5 most under-forecast.",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nf = pd.read_csv('demand_forecast.csv')\nf['bias'] = f['actual_units'] - f['forecast_units']\nres = f.groupby('product_id', as_index=False)['bias'].mean().round(1).sort_values('bias', ascending=False).head(5)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_monthly_orders",
+      "question": "How many purchase orders were placed in each month of 2024?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv', parse_dates=['order_date'])\npo = po[po['order_date'].dt.year == 2024]\nres = po.groupby(po['order_date'].dt.strftime('%Y-%m')).size().reset_index(name='orders')\nres.columns = ['month', 'orders']\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_monthly_orders",
+      "question": "How many purchase orders were placed in each month of 2024?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv', parse_dates=['order_date'])\npo = po[po['order_date'].dt.year == 2024]\nres = po.groupby(po['order_date'].dt.strftime('%Y-%m')).size().reset_index(name='orders')\nres.columns = ['month', 'orders']\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_stock_warehouse",
+      "question": "What is the total quantity on hand in each warehouse?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ninv = pd.read_csv('inventory.csv')\nres = inv.groupby('warehouse_id', as_index=False)['quantity_on_hand'].sum().sort_values('quantity_on_hand', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_stock_warehouse",
+      "question": "What is the total quantity on hand in each warehouse?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ninv = pd.read_csv('inventory.csv')\nres = inv.groupby('warehouse_id', as_index=False)['quantity_on_hand'].sum().sort_values('quantity_on_hand', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_qty_outliers",
+      "question": "How many purchase orders have a quantity more than 2 standard deviations above the mean?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\nz = (po['quantity'] - po['quantity'].mean()) / po['quantity'].std()\nres = pd.DataFrame({'outlier_orders': [int((z > 2).sum())]})\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_qty_outliers",
+      "question": "How many purchase orders have a quantity more than 2 standard deviations above the mean?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\nz = (po['quantity'] - po['quantity'].mean()) / po['quantity'].std()\nres = pd.DataFrame({'outlier_orders': [int((z > 2).sum())]})\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_price_qty_corr",
+      "question": "What is the correlation between order quantity and unit price?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\nres = pd.DataFrame({'correlation': [round(po['quantity'].corr(po['unit_price']), 3)]})\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_price_qty_corr",
+      "question": "What is the correlation between order quantity and unit price?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\nres = pd.DataFrame({'correlation': [round(po['quantity'].corr(po['unit_price']), 3)]})\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_balance_type",
+      "question": "What is the average balance for each account type?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nacc = pd.read_csv('accounts.csv')\nres = acc.groupby('account_type', as_index=False)['balance'].mean().round(2).sort_values('balance', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_balance_type",
+      "question": "What is the average balance for each account type?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nacc = pd.read_csv('accounts.csv')\nres = acc.groupby('account_type', as_index=False)['balance'].mean().round(2).sort_values('balance', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_monthly_credits",
+      "question": "What is the total credit transaction amount per month in 2024?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ntx = pd.read_csv('transactions.csv', parse_dates=['txn_date'])\ntx = tx[(tx['txn_type'] == 'credit') & (tx['txn_date'].dt.year == 2024)]\nres = tx.groupby(tx['txn_date'].dt.strftime('%Y-%m'))['amount'].sum().round(2).reset_index()\nres.columns = ['month', 'credit_total']\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_monthly_credits",
+      "question": "What is the total credit transaction amount per month in 2024?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ntx = pd.read_csv('transactions.csv', parse_dates=['txn_date'])\ntx = tx[(tx['txn_type'] == 'credit') & (tx['txn_date'].dt.year == 2024)]\nres = tx.groupby(tx['txn_date'].dt.strftime('%Y-%m'))['amount'].sum().round(2).reset_index()\nres.columns = ['month', 'credit_total']\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_top_customers",
+      "question": "Which 10 customers hold the largest total balance? Join accounts with customers.",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nacc = pd.read_csv('accounts.csv')\ncust = pd.read_csv('customers.csv')\nm = acc.merge(cust, on='customer_id')\nres = m.groupby('name', as_index=False)['balance'].sum().round(2).sort_values('balance', ascending=False).head(10)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_top_customers",
+      "question": "Which 5 customers hold the largest total balance? Join accounts with customers.",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nacc = pd.read_csv('accounts.csv')\ncust = pd.read_csv('customers.csv')\nm = acc.merge(cust, on='customer_id')\nres = m.groupby('name', as_index=False)['balance'].sum().round(2).sort_values('balance', ascending=False).head(5)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_weighted_rate",
+      "question": "What is the principal-weighted average interest rate across all loans?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nloans = pd.read_csv('loans.csv')\nrate = (loans['interest_rate'] * loans['principal']).sum() / loans['principal'].sum()\nres = pd.DataFrame({'weighted_avg_rate': [round(rate, 2)]})\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_weighted_rate",
+      "question": "What is the principal-weighted average interest rate across all loans?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nloans = pd.read_csv('loans.csv')\nrate = (loans['interest_rate'] * loans['principal']).sum() / loans['principal'].sum()\nres = pd.DataFrame({'weighted_avg_rate': [round(rate, 2)]})\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_late_payments",
+      "question": "Count the late repayments (paid after the due date) for each loan_id and show the top 10.",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nr = pd.read_csv('repayments.csv', parse_dates=['due_date', 'paid_date'])\nlate = r[r['paid_date'] > r['due_date']]\nres = late.groupby('loan_id').size().reset_index(name='late_payments').sort_values(['late_payments', 'loan_id'], ascending=[False, True]).head(10)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_late_payments",
+      "question": "Count the late repayments (paid after the due date) for each loan_id and show the top 5.",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nr = pd.read_csv('repayments.csv', parse_dates=['due_date', 'paid_date'])\nlate = r[r['paid_date'] > r['due_date']]\nres = late.groupby('loan_id').size().reset_index(name='late_payments').sort_values(['late_payments', 'loan_id'], ascending=[False, True]).head(5)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_channel_share",
+      "question": "What percentage of the total transaction amount goes through each channel?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ntx = pd.read_csv('transactions.csv')\nshare = tx.groupby('channel')['amount'].sum() / tx['amount'].sum() * 100\nres = share.round(1).reset_index()\nres.columns = ['channel', 'share_pct']\nres = res.sort_values('share_pct', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_channel_share",
+      "question": "What percentage of the total transaction amount goes through each channel?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ntx = pd.read_csv('transactions.csv')\nshare = tx.groupby('channel')['amount'].sum() / tx['amount'].sum() * 100\nres = share.round(1).reset_index()\nres.columns = ['channel', 'share_pct']\nres = res.sort_values('share_pct', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_large_txn",
+      "question": "How many transactions above 3000 are there in each merchant category?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ntx = pd.read_csv('transactions.csv')\nbig = tx[tx['amount'] > 3000]\nres = big.groupby('merchant_category').size().reset_index(name='large_txns').sort_values(['large_txns', 'merchant_category'], ascending=[False, True])\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_large_txn",
+      "question": "How many transactions above 2000 are there in each merchant category?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ntx = pd.read_csv('transactions.csv')\nbig = tx[tx['amount'] > 2000]\nres = big.groupby('merchant_category').size().reset_index(name='large_txns').sort_values(['large_txns', 'merchant_category'], ascending=[False, True])\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_spend_category",
+      "question": "What is the total purchase spend for each product category?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\nproducts = pd.read_csv('products.csv')\nm = po.merge(products, on='product_id')\nm['spend'] = m['quantity'] * m['unit_price']\nres = m.groupby('category', as_index=False)['spend'].sum().round(2).sort_values('spend', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_spend_category",
+      "question": "What is the total purchase spend for each product category?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\nproducts = pd.read_csv('products.csv')\nm = po.merge(products, on='product_id')\nm['spend'] = m['quantity'] * m['unit_price']\nres = m.groupby('category', as_index=False)['spend'].sum().round(2).sort_values('spend', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_avg_order_value_status",
+      "question": "What is the average order value for each purchase order status?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\npo['value'] = po['quantity'] * po['unit_price']\nres = po.groupby('status', as_index=False)['value'].mean().round(2).sort_values('value', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_avg_order_value_status",
+      "question": "What is the average order value for each purchase order status?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\npo['value'] = po['quantity'] * po['unit_price']\nres = po.groupby('status', as_index=False)['value'].mean().round(2).sort_values('value', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_freight_carrier",
+      "question": "What is the total freight cost for each carrier?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nsh = pd.read_csv('shipments.csv')\nres = sh.groupby('carrier', as_index=False)['freight_cost'].sum().round(2).sort_values('freight_cost', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_freight_carrier",
+      "question": "What is the total freight cost for each carrier?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nsh = pd.read_csv('shipments.csv')\nres = sh.groupby('carrier', as_index=False)['freight_cost'].sum().round(2).sort_values('freight_cost', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_lead_time_country",
+      "question": "What is the average supplier lead time by country?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nsup = pd.read_csv('suppliers.csv')\nres = sup.groupby('country', as_index=False)['lead_time_days'].mean().round(1).sort_values('lead_time_days', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_lead_time_country",
+      "question": "What is the average supplier lead time by country?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nsup = pd.read_csv('suppliers.csv')\nres = sup.groupby('country', as_index=False)['lead_time_days'].mean().round(1).sort_values('lead_time_days', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_orders_by_status",
+      "question": "How many purchase orders are there in each status?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\nres = po.groupby('status').size().reset_index(name='orders').sort_values('orders', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_orders_by_status",
+      "question": "How many purchase orders are there in each status?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\nres = po.groupby('status').size().reset_index(name='orders').sort_values('orders', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_inventory_value",
+      "question": "What is the total inventory value for each product category?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ninv = pd.read_csv('inventory.csv')\nproducts = pd.read_csv('products.csv')\nm = inv.merge(products, on='product_id')\nm['value'] = m['quantity_on_hand'] * m['unit_cost']\nres = m.groupby('category', as_index=False)['value'].sum().round(2).sort_values('value', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_inventory_value",
+      "question": "What is the total inventory value for each product category?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ninv = pd.read_csv('inventory.csv')\nproducts = pd.read_csv('products.csv')\nm = inv.merge(products, on='product_id')\nm['value'] = m['quantity_on_hand'] * m['unit_cost']\nres = m.groupby('category', as_index=False)['value'].sum().round(2).sort_values('value', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_monthly_spend",
+      "question": "What was the total purchase spend in each month of 2024?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv', parse_dates=['order_date'])\npo = po[po['order_date'].dt.year == 2024].copy()\npo['spend'] = po['quantity'] * po['unit_price']\nres = po.groupby(po['order_date'].dt.strftime('%Y-%m'))['spend'].sum().round(2).reset_index()\nres.columns = ['month', 'spend']\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_monthly_spend",
+      "question": "What was the total purchase spend in each month of 2024?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\npo = pd.read_csv('purchase_orders.csv', parse_dates=['order_date'])\npo = po[po['order_date'].dt.year == 2024].copy()\npo['spend'] = po['quantity'] * po['unit_price']\nres = po.groupby(po['order_date'].dt.strftime('%Y-%m'))['spend'].sum().round(2).reset_index()\nres.columns = ['month', 'spend']\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_txn_type_total",
+      "question": "What is the total transaction amount for each transaction type?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ntx = pd.read_csv('transactions.csv')\nres = tx.groupby('txn_type', as_index=False)['amount'].sum().round(2).sort_values('amount', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_txn_type_total",
+      "question": "What is the total transaction amount for each transaction type?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ntx = pd.read_csv('transactions.csv')\nres = tx.groupby('txn_type', as_index=False)['amount'].sum().round(2).sort_values('amount', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_loan_status_count",
+      "question": "How many loans are there in each status?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nloans = pd.read_csv('loans.csv')\nres = loans.groupby('status').size().reset_index(name='loans').sort_values('loans', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_loan_status_count",
+      "question": "How many loans are there in each status?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nloans = pd.read_csv('loans.csv')\nres = loans.groupby('status').size().reset_index(name='loans').sort_values('loans', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_avg_principal_status",
+      "question": "What is the average loan principal for each loan status?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nloans = pd.read_csv('loans.csv')\nres = loans.groupby('status', as_index=False)['principal'].mean().round(2).sort_values('principal', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_avg_principal_status",
+      "question": "What is the average loan principal for each loan status?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nloans = pd.read_csv('loans.csv')\nres = loans.groupby('status', as_index=False)['principal'].mean().round(2).sort_values('principal', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_monthly_debits",
+      "question": "What is the total debit amount in each month of 2024?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ntx = pd.read_csv('transactions.csv', parse_dates=['txn_date'])\ntx = tx[(tx['txn_type'] == 'debit') & (tx['txn_date'].dt.year == 2024)]\nres = tx.groupby(tx['txn_date'].dt.strftime('%Y-%m'))['amount'].sum().round(2).reset_index()\nres.columns = ['month', 'debit_total']\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_monthly_debits",
+      "question": "What is the total debit amount in each month of 2024?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ntx = pd.read_csv('transactions.csv', parse_dates=['txn_date'])\ntx = tx[(tx['txn_type'] == 'debit') & (tx['txn_date'].dt.year == 2024)]\nres = tx.groupby(tx['txn_date'].dt.strftime('%Y-%m'))['amount'].sum().round(2).reset_index()\nres.columns = ['month', 'debit_total']\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_segment_count",
+      "question": "How many customers are in each segment?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ncust = pd.read_csv('customers.csv')\nres = cust.groupby('segment').size().reset_index(name='customers').sort_values('customers', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_segment_count",
+      "question": "How many customers are in each segment?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ncust = pd.read_csv('customers.csv')\nres = cust.groupby('segment').size().reset_index(name='customers').sort_values('customers', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_net_gl_center",
+      "question": "What is the net amount (debit minus credit) for each cost center?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ngl = pd.read_csv('gl_entries.csv')\ngl['net'] = gl['debit'] - gl['credit']\nres = gl.groupby('cost_center', as_index=False)['net'].sum().round(2).sort_values('net', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_net_gl_center",
+      "question": "What is the net amount (debit minus credit) for each cost center?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\ngl = pd.read_csv('gl_entries.csv')\ngl['net'] = gl['debit'] - gl['credit']\nres = gl.groupby('cost_center', as_index=False)['net'].sum().round(2).sort_values('net', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_late_rate_loan_status",
+      "question": "What percentage of repayments were paid late for each loan status?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nr = pd.read_csv('repayments.csv', parse_dates=['due_date', 'paid_date'])\nloans = pd.read_csv('loans.csv')\nm = r.merge(loans, on='loan_id')\nm = m[m['paid_date'].notna()].copy()\nm['late'] = m['paid_date'] > m['due_date']\nres = (m.groupby('status')['late'].mean() * 100).round(1).reset_index()\nres.columns = ['status', 'late_pct']\nres = res.sort_values('late_pct', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    },
+    {
+      "template": "py_late_rate_loan_status",
+      "question": "What percentage of repayments were paid late for each loan status?",
+      "status": "ran",
+      "match": true,
+      "strict_format": true,
+      "code": "import pandas as pd\nr = pd.read_csv('repayments.csv', parse_dates=['due_date', 'paid_date'])\nloans = pd.read_csv('loans.csv')\nm = r.merge(loans, on='loan_id')\nm = m[m['paid_date'].notna()].copy()\nm['late'] = m['paid_date'] > m['due_date']\nres = (m.groupby('status')['late'].mean() * 100).round(1).reset_index()\nres.columns = ['status', 'late_pct']\nres = res.sort_values('late_pct', ascending=False)\nprint(res.to_csv(index=False, sep='|'))"
+    }
+  ]
+}

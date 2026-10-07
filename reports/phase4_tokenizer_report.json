@@ -1,0 +1,88 @@
+{
+  "vocab_size": 32768,
+  "special_ids": {
+    "<|bos|>": 0,
+    "<|eos|>": 1,
+    "<|pad|>": 2,
+    "<|unk|>": 3,
+    "<|user|>": 4,
+    "<|assistant|>": 5,
+    "<|system|>": 6,
+    "<|schema|>": 7,
+    "<|/schema|>": 8,
+    "<|sql|>": 9,
+    "<|/sql|>": 10,
+    "<|result|>": 11,
+    "<|/result|>": 12,
+    "<|python|>": 13,
+    "<|/python|>": 14,
+    "<|output|>": 15,
+    "<|/output|>": 16,
+    "<|insight|>": 17,
+    "<|/insight|>": 18,
+    "<|think|>": 19,
+    "<|/think|>": 20
+  },
+  "special_ids_match_hf": true,
+  "special_tokens_single_id": true,
+  "roundtrip_failures": 0,
+  "roundtrip_checked": 2100,
+  "fertility": {
+    "python": {
+      "docs": 300,
+      "chars_per_token": 3.485,
+      "gpt2_chars_per_token": 2.213,
+      "vs_gpt2": 1.575
+    },
+    "sql": {
+      "docs": 300,
+      "chars_per_token": 2.67,
+      "gpt2_chars_per_token": 2.376,
+      "vs_gpt2": 1.123
+    },
+    "notebooks": {
+      "docs": 300,
+      "chars_per_token": 3.119,
+      "gpt2_chars_per_token": 2.516,
+      "vs_gpt2": 1.24
+    },
+    "finance-sec": {
+      "docs": 300,
+      "chars_per_token": 4.635,
+      "gpt2_chars_per_token": 5.147,
+      "vs_gpt2": 0.901
+    },
+    "fineweb-edu": {
+      "docs": 300,
+      "chars_per_token": 4.31,
+      "gpt2_chars_per_token": 4.639,
+      "vs_gpt2": 0.929
+    },
+    "cosmopedia": {
+      "docs": 300,
+      "chars_per_token": 4.924,
+      "gpt2_chars_per_token": 5.118,
+      "vs_gpt2": 0.962
+    },
+    "math": {
+      "docs": 300,
+      "chars_per_token": 3.138,
+      "gpt2_chars_per_token": 3.303,
+      "vs_gpt2": 0.95
+    }
+  },
+  "digit_split": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5"
+  ],
+  "indent_12_spaces": [
+    "\u010a\u0120\u0120\u0120\u0120\u0120\u0120\u0120\u0120\u0120\u0120\u0120",
+    "\u0120x",
+    "\u0120=",
+    "\u0120",
+    "1"
+  ]
+}

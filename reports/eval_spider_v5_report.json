@@ -1,0 +1,40 @@
+{
+  "checkpoint": "artifacts/sft_v5/best.pt",
+  "questions": 1034,
+  "evaluated": 1034,
+  "too_long": 0,
+  "scores_on_evaluated": {
+    "k=0": {
+      "execution_accuracy": 0.2205029013539652,
+      "tolerant": 0.2205029013539652,
+      "executes_rate": 0.3820116054158607
+    },
+    "k=4": {
+      "execution_accuracy": 0.30174081237911027,
+      "tolerant": 0.30174081237911027,
+      "executes_rate": 0.5783365570599613
+    },
+    "k=8": {
+      "execution_accuracy": 0.32978723404255317,
+      "tolerant": 0.32978723404255317,
+      "executes_rate": 0.6673114119922631
+    }
+  },
+  "scores_all_questions": {
+    "k=0": {
+      "execution_accuracy": 0.2205029013539652,
+      "tolerant": 0.2205029013539652,
+      "executes_rate": 0.3820116054158607
+    },
+    "k=4": {
+      "execution_accuracy": 0.30174081237911027,
+      "tolerant": 0.30174081237911027,
+      "executes_rate": 0.5783365570599613
+    },
+    "k=8": {
+      "execution_accuracy": 0.32978723404255317,
+      "tolerant": 0.32978723404255317,
+      "executes_rate": 0.6673114119922631
+    }
+  }
+}

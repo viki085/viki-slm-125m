@@ -1,0 +1,24 @@
+{
+  "returncode": 0,
+  "staging_s": 7,
+  "wall_s": 180,
+  "train_phase_s": 189,
+  "node_cost_usd": 1.58,
+  "world_size": 8,
+  "steps": 200,
+  "total_steps": 200,
+  "stopped_by_budget": false,
+  "first_loss": 10.545089721679688,
+  "final_loss": 4.338260173797607,
+  "val_loss_last": {
+    "python": 4.010205268859863,
+    "sql": 2.7116804122924805,
+    "notebooks": 3.8045694828033447,
+    "fineweb-edu": 5.656133651733398,
+    "cosmopedia": 5.439063549041748,
+    "finance-sec": 4.327239990234375,
+    "math": 4.704883575439453
+  },
+  "tokens_per_sec_total": 3216951.453879024,
+  "elapsed_s": 138.07529878616333
+}

@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Viki SLM 125M</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%235b5bf0'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f8fc;--card:#fff;--ink:#12142b;--mut:#5b6080;--line:#e5e8f4;--soft:#f0f2fd;--acc:#5b5bf0;--acc2:#d946a8;--ok:#14a76c;--warnbg:#fff4e8;--warnln:#f5d9bd;--warnfg:#8a4a14;--bad:#c0392b;--code:#f4f5fb;--shadow:0 1px 2px rgba(18,20,43,.04),0 8px 28px rgba(18,20,43,.06)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e1020;--card:#171a30;--ink:#eceefb;--mut:#a0a5c6;--line:#2a2e4a;--soft:#1f2340;--acc:#8b8bff;--acc2:#f070c4;--warnbg:#2a2014;--warnln:#4a3720;--warnfg:#f0c58f;--bad:#ff8a7a;--code:#1d2140;--shadow:0 8px 28px rgba(0,0,0,.35)}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body:before{content:"";position:fixed;inset:0 0 auto 0;height:420px;background:radial-gradient(60% 100% at 0% 0%,rgba(217,70,168,.10),transparent 70%),radial-gradient(50% 90% at 100% 0%,rgba(91,91,240,.10),transparent 70%);pointer-events:none;z-index:-1}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:12px;height:60px}.sp{flex:1}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--acc),var(--acc2))}
+.tag{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);background:var(--soft);padding:3px 8px;border-radius:99px}
+a.btn,button.btn{display:inline-flex;align-items:center;gap:7px;font:600 14px Inter,sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line);padding:8px 13px;border-radius:11px;text-decoration:none;cursor:pointer}
+a.btn.ghost{background:transparent;border-color:transparent}
+.ico{width:15px;height:15px}
+.hero{padding:54px 0 26px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;background:var(--card);border:1px solid var(--line);padding:6px 12px;border-radius:99px;box-shadow:var(--shadow)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(20,167,108,.18)}
+h1{font:700 clamp(34px,6vw,54px)/1.08 "Space Grotesk",Inter,sans-serif;letter-spacing:-.02em;margin:18px 0 14px}
+.grad{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mut);font-size:19px;max-width:640px;margin:0 0 22px}.sub b{color:var(--ink)}
+.facts{display:flex;flex-wrap:wrap;gap:10px}
+.fact{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:7px 13px;font-size:14px;color:var(--ink)}.fact span{color:var(--acc);font-weight:600}
+section{padding:34px 0 8px}
+.kicker{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--acc)}
+h2{font:700 30px/1.15 "Space Grotesk",Inter,sans-serif;margin:6px 0 6px;letter-spacing:-.01em}
+.lead{color:var(--mut);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+.play{padding:18px}
+.tabs{display:inline-flex;background:var(--soft);padding:4px;border-radius:13px;gap:2px;margin-bottom:14px;flex-wrap:wrap}
+.tab{font:600 14px Inter,sans-serif;border:0;background:transparent;color:var(--mut);padding:7px 14px;border-radius:10px;cursor:pointer}
+.tab.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(18,20,43,.12)}
+.samples{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chip{font:500 13px Inter,sans-serif;color:#33365a;background:var(--soft);border:1px solid var(--line);padding:8px 12px;border-radius:10px;cursor:pointer;text-align:left;max-width:100%}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .chip{color:var(--ink)}}
+.chip:hover{border-color:var(--acc)}.chip small{display:block;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--acc);margin-bottom:1px}
+label{display:block;font-size:12px;font-weight:600;color:var(--mut);margin:12px 0 6px;letter-spacing:.03em}
+select,textarea{width:100%;font:inherit;color:var(--ink);background:color-mix(in srgb,var(--card) 70%,var(--bg));border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+textarea{resize:vertical}textarea.mono{font:13px/1.5 "JetBrains Mono",ui-monospace,Consolas,monospace}
+select{width:auto;min-width:240px;padding:9px 12px;border-radius:11px}
+select:focus,textarea:focus{outline:2px solid color-mix(in srgb,var(--acc) 45%,transparent);border-color:var(--acc)}
+.bar{display:flex;align-items:center;gap:12px;margin-top:14px;flex-wrap:wrap}
+.go{display:inline-flex;align-items:center;gap:8px;font:600 15px Inter,sans-serif;color:#fff;background:linear-gradient(135deg,var(--acc),#7b5cf0);border:0;padding:11px 22px;border-radius:12px;cursor:pointer;box-shadow:0 8px 20px rgba(91,91,240,.35)}
+.go:disabled{opacity:.6;cursor:wait}
+.hint{color:var(--mut);font-size:13px}
+#out{margin-top:16px;border-top:1px solid var(--line);padding-top:6px}
+#out h3{font:600 11px Inter,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);margin:16px 0 7px}
+pre{margin:0;background:var(--code);border:1px solid var(--line);border-radius:12px;padding:12px 14px;overflow:auto;font:13px/1.55 "JetBrains Mono",ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-word}
+.tbl{overflow:auto;max-height:280px;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:7px 12px;text-align:left;border-bottom:1px solid var(--line)}th{background:var(--soft);color:var(--mut);font-weight:600;position:sticky;top:0}tr:last-child td{border-bottom:0}
+.insight{font-size:17px;white-space:pre-wrap;background:linear-gradient(90deg,var(--soft),transparent);border-left:3px solid var(--acc);padding:10px 14px;border-radius:0 12px 12px 0}
+.err{color:var(--bad);font-size:14px}
+details{margin-top:8px}summary{cursor:pointer;color:var(--mut);font-size:13px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:820px){.grid3{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
+@media(max-width:520px){.grid3{grid-template-columns:1fr}}
+.stat{padding:18px 20px}.stat .k{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.stat .v{font:700 38px/1.15 "Space Grotesk",sans-serif;margin:4px 0 2px}.stat .v.a{color:var(--acc)}
+.stat .n{font:12px "JetBrains Mono",monospace;color:var(--mut)}
+.panel{padding:18px 20px}.panel h4{margin:0 0 12px;font:600 16px Inter,sans-serif}
+.row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}.row:last-child{border:0}
+.row span:first-child{color:var(--mut)}.row span:last-child{font:500 13px "JetBrains Mono",monospace;text-align:right}
+.mix{display:flex;height:9px;border-radius:99px;overflow:hidden;margin-bottom:10px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--mut);margin-bottom:8px}.legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+.warn{margin:26px 0 8px;background:var(--warnbg);border:1px solid var(--warnln);color:var(--warnfg);border-radius:14px;padding:13px 16px;font-size:14px}
+.score{padding:16px 20px}.score .big{font:700 30px "Space Grotesk",sans-serif}.score .old{color:var(--mut);font-size:13px}
+.up{color:var(--ok);font-weight:600}
+footer{border-top:1px solid var(--line);margin-top:34px;padding:26px 0 46px;color:var(--mut);font-size:14px}
+</style>
+</head>
+<body>
+<header><div class="wrap nav">
+  <div class="brand"><div class="logo"></div><b>Viki SLM 125M</b><span class="tag">SFT v5</span></div>
+  <div class="sp"></div>
+  <a class="btn ghost" href="#numbers"><span>The numbers</span></a>
+  <a class="btn" href="#playground"><span>Try it</span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</div></header>
+
+<div class="wrap">
+<div class="hero">
+  <span class="eyebrow"><span class="dot"></span> Running locally on your GPU</span>
+  <h1>A <span class="grad">125M-parameter</span><br>Python &amp; SQL coding model.</h1>
+  <p class="sub">Pretrained from scratch on <b>7.5 billion tokens</b> of Python, SQL, notebooks, finance filings and web text, then fine-tuned to turn a question and a schema into <b>SQL, pandas code and plain-English insight</b>.</p>
+  <div class="facts">
+    <div class="fact"><span>124.3M</span> parameters</div><div class="fact"><span>7.5B</span> tokens seen</div>
+    <div class="fact"><span>32,768</span> BPE vocab</div><div class="fact"><span>8×H100</span> pretraining</div>
+    <div class="fact"><span>124K</span> SFT examples</div>
+  </div>
+</div>
+
+<section id="playground">
+  <div class="kicker">Playground</div>
+  <h2>Ask it something</h2>
+  <p class="lead">Pick a mode, choose a sample or write your own. SQL and Python answers are actually executed, so you see real results next to what the model wrote.</p>
+  <div class="card play">
+    <div class="tabs" id="tabs"></div>
+    <div class="samples" id="samples"></div>
+    <div id="dbWrap"><label for="db">DATA SOURCE</label><select id="db"></select></div>
+    <details id="schemaBox" open>
+      <summary id="schemaSummary">Schema</summary>
+      <label for="schema" style="margin-top:8px"><span id="schemaLabel">SCHEMA</span> <span class="hint" id="schemaHint"></span></label>
+      <textarea id="schema" class="mono" rows="8" spellcheck="false"></textarea>
+    </details>
+    <label for="q">YOUR QUESTION</label>
+    <textarea id="q" rows="3" placeholder="Type a question, or click a sample above"></textarea>
+    <div class="bar">
+      <button id="go" class="go"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 4l14 8-14 8z"/></svg>Submit</button>
+      <button id="copyQ" class="btn" type="button">Copy question</button>
+      <span id="status" class="hint"></span><span class="hint">Ctrl+Enter submits</span>
+    </div>
+    <div id="out" hidden></div>
+  </div>
+</section>
+
+<section id="numbers">
+  <div class="kicker">The numbers</div>
+  <h2>What it took</h2>
+  <p class="lead">Figures from the actual runs and the Modal bill, not estimates.</p>
+  <div class="grid3">
+    <div class="card stat"><div class="k">Parameters</div><div class="v a">124.3M</div><div class="n">124,275,456 exact</div></div>
+    <div class="card stat"><div class="k">Pretraining tokens</div><div class="v">7.5B</div><div class="n">epoch 1 of a 7.03B corpus</div></div>
+    <div class="card stat"><div class="k">Cloud cost (data + pretraining)</div><div class="v a">$40.83</div><div class="n">$11.37 data processing + $29.46 GPU (epoch-1 run $25.86)</div></div>
+    <div class="card stat"><div class="k">SFT</div><div class="v">123,655</div><div class="n">examples, 3 epochs, 2,040 steps</div></div>
+    <div class="card stat"><div class="k">SFT cost</div><div class="v a">$0</div><div class="n">local GPU, about 100 min</div></div>
+    <div class="card stat"><div class="k">Val loss (SQL / Python)</div><div class="v">0.70 / 1.29</div><div class="n">base model, held-out text</div></div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="kicker">Evaluation</div>
+  <h2>How well does it work?</h2>
+  <p class="lead">SQL is judged by running the query against a real database and comparing results. Final model: SFT v5.</p>
+  <div class="grid3">
+    <div class="card score"><div class="k hint">Spider dev (1,034 questions, real databases)</div><div class="big">33.0%</div><div class="old">v4 12.3% → <span class="up">v5 33.0%</span> with 8-sample voting<br>22.1% without voting. Multi-table schemas the model never saw.</div></div>
+    <div class="card score"><div class="k hint">Open-ended SQL, unseen domains</div><div class="big">58.0%</div><div class="old">60.2% with voting<br>Single-schema questions. Insights match the result 99.5% of the time.</div></div>
+    <div class="card score"><div class="k hint">Held-out finance / supply-chain SQL</div><div class="big">61.4%</div><div class="old">First four templates 89%, three newer and harder 24%<br>Ascending order and column choice are still weak.</div></div>
+    <div class="card score"><div class="k hint">Python (pandas) on unseen data</div><div class="big">100%</div><div class="old">v2 17.2% → <span class="up">v5 100%</span><br>Template-style questions the model trained on.</div></div>
+    <div class="card score"><div class="k hint">Refusal / clarify / missing data</div><div class="big">100%</div><div class="old">v1 0% → v2 100% → v5 100%<br>On 300 prompts from schemas it never saw.</div></div>
+    <div class="card score"><div class="k hint">Chat and open coding help</div><div class="big">Weak</div><div class="old">Answers are often wrong or off-topic. Use the SQL and Python modes.</div></div>
+  </div>
+</section>
+
+<section id="hood">
+  <div class="kicker">Under the hood</div>
+  <h2>Architecture &amp; data</h2>
+  <p class="lead">A Llama-style decoder, a purpose-built tokenizer and a code-first data mix.</p>
+  <div class="grid2">
+    <div class="card panel"><h4>Model</h4>
+      <div class="row"><span>Architecture</span><span>Llama (decoder)</span></div>
+      <div class="row"><span>Layers / dim / heads</span><span>12 / 768 / 12</span></div>
+      <div class="row"><span>Feed-forward</span><span>2,560</span></div>
+      <div class="row"><span>Context length</span><span>2,048</span></div>
+      <div class="row"><span>Vocabulary</span><span>32,768 BPE</span></div>
+      <div class="row"><span>Positional</span><span>RoPE, tied embed</span></div>
+      <div class="row"><span>Precision</span><span>bfloat16</span></div>
+    </div>
+    <div class="card panel"><h4>Data &amp; training</h4>
+      <div class="mix">
+        <i style="width:35.6%;background:#5b5bf0"></i><i style="width:21.4%;background:#8b5cf0"></i><i style="width:12.3%;background:#d946a8"></i>
+        <i style="width:10.2%;background:#f08a5b"></i><i style="width:8%;background:#14a76c"></i><i style="width:6.9%;background:#3aa6d9"></i><i style="width:5.6%;background:#9aa0c4"></i>
+      </div>
+      <div class="legend"><span><i style="background:#5b5bf0"></i>Python 35.6%</span><span><i style="background:#8b5cf0"></i>FineWeb-edu 21.4%</span><span><i style="background:#d946a8"></i>SQL 12.3%</span><span><i style="background:#f08a5b"></i>Notebooks 10.2%</span><span><i style="background:#14a76c"></i>Finance 8.0%</span><span><i style="background:#3aa6d9"></i>Cosmopedia 6.9%</span><span><i style="background:#9aa0c4"></i>Math 5.6%</span></div>
+      <div class="row"><span>Unique corpus</span><span>7.03B tokens</span></div>
+      <div class="row"><span>Throughput</span><span>~3.2M tok/s</span></div>
+      <div class="row"><span>SFT mix</span><span>SQL, pandas, repair, refusal, chat</span></div>
+      <div class="row"><span>Supply-chain text</span><span>none in pretraining</span></div>
+    </div>
+  </div>
+  <div class="warn"><b>Small model, handle with care.</b> It writes plausible SQL and code that can still be wrong, so check the generated query and result before relying on them. Chat answers can be inaccurate or invented. It is not a source of financial or business advice.</div>
+</section>
+</div>
+<footer><div class="wrap">Built from scratch with a streamed data pipeline, a custom 32K tokenizer, 8×H100 pretraining on Modal, and local supervised fine-tuning. See the project README and docs/DECISIONS.md for the full record.</div></footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const CUSTOM_SCHEMAS={
+ employees:"CREATE TABLE employees (id INTEGER, name TEXT, department TEXT, salary REAL, hire_date TEXT);\nINSERT INTO employees VALUES (1,'Ana','Sales',52000,'2021-03-01'),(2,'Ben','Sales',61000,'2020-07-15'),(3,'Cara','Engineering',98000,'2019-01-10'),(4,'Dev','Engineering',105000,'2022-05-02'),(5,'Eli','HR',58000,'2023-02-20');",
+ orders:"CREATE TABLE customers (id INTEGER, name TEXT, city TEXT);\nCREATE TABLE orders (id INTEGER, customer_id INTEGER, total REAL, order_date TEXT);\nINSERT INTO customers VALUES (1,'Acme','Austin'),(2,'Bolt','Boston'),(3,'Cobalt','Chicago');\nINSERT INTO orders VALUES (1,1,120.5,'2024-01-05'),(2,1,80,'2024-02-11'),(3,1,200,'2024-02-20'),(4,1,50,'2024-03-02'),(5,2,310,'2024-01-19'),(6,3,45,'2024-03-09');"
+};
+const PYCSV="--- sales.csv\norder_id,region,product,units,price\n1,East,Widget,10,2.5\n2,West,Widget,4,2.5\n3,East,Gadget,7,9.0\n4,West,Gadget,12,9.0\n5,East,Widget,3,2.5\n--- regions.csv\nregion,manager\nEast,Ana\nWest,Ben";
+const SAMPLES=[
+ {mode:"sql",db:"supply_chain",tag:"Supply chain",q:"Which 5 suppliers have the highest average rating?"},
+ {mode:"sql",db:"supply_chain",tag:"Supply chain",q:"How many purchase orders are in each status?"},
+ {mode:"sql",db:"supply_chain",tag:"Supply chain",q:"What is the total quantity on hand for each warehouse city?"},
+ {mode:"sql",db:"supply_chain",tag:"Supply chain",q:"Show total freight cost by carrier."},
+ {mode:"sql",db:"supply_chain",tag:"Hard: derived metric",q:"Show average order value for each supplier country."},
+ {mode:"sql",db:"finance",tag:"Finance",q:"What is the total account balance by account type?"},
+ {mode:"sql",db:"finance",tag:"Finance",q:"How many customers are in each segment?"},
+ {mode:"sql",db:"finance",tag:"Finance",q:"Show the 10 largest transactions with their channel."},
+ {mode:"sql",db:"finance",tag:"Hard: rate calculation",q:"Show the late-payment rate for each customer segment."},
+ {mode:"sql",db:"custom",schema:"employees",tag:"Your own schema",q:"What is the average salary by department?"},
+ {mode:"sql",db:"custom",schema:"orders",tag:"Your own schema",q:"Which customers placed more than 3 orders?"},
+ {mode:"sql",db:"custom",schema:"employees",tag:"Should refuse",q:"Delete all employees from the Sales department."},
+ {mode:"sql",db:"custom",schema:"employees",tag:"Should clarify",q:"Who is our best employee?"},
+ {mode:"sql",db:"custom",schema:"employees",tag:"Should say data is missing",q:"What is the average customer satisfaction score?"},
+ {mode:"python",db:"supply_chain",tag:"Supply chain",q:"Calculate the total spend (quantity x unit_price) for each supplier_id and show the top 5."},
+ {mode:"python",db:"supply_chain",tag:"Supply chain",q:"What is the average unit cost per product category?"},
+ {mode:"python",db:"supply_chain",tag:"Supply chain",q:"How many purchase orders were placed in each month of 2024?"},
+ {mode:"python",db:"supply_chain",tag:"Supply chain",q:"What is the correlation between order quantity and unit price?"},
+ {mode:"python",db:"finance",tag:"Finance",q:"What is the average balance for each account type?"},
+ {mode:"python",db:"finance",tag:"Finance",q:"What percentage of the total transaction amount goes through each channel?"},
+ {mode:"python",db:"finance",tag:"Finance",q:"How many transactions above 1000 are there in each merchant category?"},
+ {mode:"python",db:"custom",tag:"Your own CSV data",q:"What is the total revenue (units x price) for each region?"},
+ {mode:"chat",tag:"Python help (not executed)",q:"Write a Python function named `moving_average` that takes a list of numbers and a window size and returns the moving averages."},
+ {mode:"chat",tag:"Python help (not executed)",q:"Write a pandas snippet that reads sales.csv and plots monthly revenue as a bar chart."},
+ {mode:"chat",tag:"Python help (not executed)",q:"Create a Python function that parses a date string like '2024-03-05' and returns the day of the week."},
+ {mode:"chat",tag:"Domain question (unreliable)",q:"Explain what safety stock is in supply chain management and how it is calculated."},
+ {mode:"chat",tag:"Domain question (unreliable)",q:"What is the difference between a bank's net interest margin and its net interest income?"},
+ {mode:"chat",tag:"General chat",q:"Hi there! What can you help me with?"}
+];
+const MODES={sql:"SQL analyst",python:"Python on data",chat:"Chat & code help"};
+let MODE="sql",DBS={sql:{},python:{}};
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+function renderTabs(){
+  $("tabs").innerHTML="";
+  Object.entries(MODES).forEach(([k,v])=>{
+    const b=document.createElement("button");b.textContent=v;b.className="tab"+(k===MODE?" on":"");
+    b.onclick=()=>{MODE=k;renderTabs();setupMode();renderSamples();$("out").hidden=true};
+    $("tabs").append(b);
+  });
+}
+function setupMode(){
+  const chat=MODE==="chat";
+  $("dbWrap").style.display=chat?"none":"";
+  $("schemaSummary").textContent=chat?"System prompt (optional)":MODE==="python"?"Data files":"Schema";
+  $("schemaLabel").textContent=chat?"SYSTEM PROMPT":MODE==="python"?"DATA FILES":"SCHEMA";
+  if(chat){$("schema").readOnly=false;$("schema").rows=3;$("schema").value="";$("schemaHint").textContent="(leave empty for plain chat)";$("schemaBox").open=false;return}
+  $("schema").rows=8;$("schemaBox").open=true;
+  const names=Object.keys(DBS[MODE]);
+  $("db").innerHTML=names.map(k=>`<option value="${k}">${k.replace("_"," ")} (sample data)</option>`).join("")
+    +`<option value="custom">Custom ${MODE==="sql"?"schema":"CSV data"} (paste your own)</option>`;
+  setDb(names[0]);
+}
+function setDb(name,schemaKey){
+  if(MODE==="chat")return;
+  $("db").value=name;const custom=name==="custom";
+  $("schema").readOnly=!custom;
+  if(MODE==="sql"){
+    $("schemaHint").textContent=custom?"(CREATE TABLE statements; add INSERT statements to get real results)":"(sample database, read-only)";
+    $("schema").value=custom?(CUSTOM_SCHEMAS[schemaKey]||CUSTOM_SCHEMAS.employees):DBS.sql[name];
+  }else{
+    $("schemaHint").textContent=custom?"(one block per file, each starting with a line like: --- sales.csv)":"(columns of the sample CSV files, read-only)";
+    $("schema").value=custom?PYCSV:DBS.python[name];
+  }
+}
+function renderSamples(){
+  $("samples").innerHTML="";
+  SAMPLES.filter(s=>s.mode===MODE).forEach(s=>{
+    const b=document.createElement("button");b.className="chip";b.type="button";b.title=s.q;
+    const short=s.q.length>64?s.q.slice(0,62)+"…":s.q;
+    b.innerHTML=`<small>${esc(s.tag)}</small>${esc(short)}`;
+    b.onclick=()=>{if(s.db)setDb(s.db,s.schema);$("q").value=s.q;$("q").focus()};
+    $("samples").append(b);
+  });
+}
+function renderResult(r){
+  let h="";
+  if(r.error&&!r.sql&&!r.code){h=`<div class="err">${esc(r.error)}</div>`}
+  else{
+    if(r.format_warning){h+=`<div class="err" style="margin-top:12px">Format warning: ${esc(r.format_warning)}</div>`}
+    if(r.code){h+=`<h3>Generated Python</h3><pre>${esc(r.code)}</pre>`}
+    if(r.stdout){h+=`<h3>Output</h3><pre>${esc(r.stdout)}</pre>`}
+    if(r.repairs&&r.repairs.length){h+=`<h3>Self-repair · ${r.repairs.length} retr${r.repairs.length==1?"y":"ies"}</h3>`+r.repairs.map((x,i)=>`<pre style="margin-bottom:6px">${esc(x.sql)}</pre><div class="err" style="margin-bottom:10px">Attempt ${i+1} failed: ${esc(x.error)}</div>`).join("")}
+    if(r.sql){h+=`<h3>${r.repairs&&r.repairs.length?"Final SQL":"Generated SQL"}</h3><pre>${esc(r.sql)}</pre>`}
+    if(r.vote){h+=`<div class="hint" style="margin-top:6px">${r.vote.votes} of ${r.vote.executed} runnable candidates (out of ${r.vote.of} written) returned this result${r.vote.changed_from_greedy?" · differs from the first attempt":""}.</div>`}
+    if(r.error){h+=`<h3>Execution</h3><div class="err">Execution failed: ${esc(r.error)}</div>`}
+    if(r.result){
+      const c=r.result.columns,rows=r.result.rows;
+      h+=`<h3>Result · ${r.result.total_rows} row${r.result.total_rows==1?"":"s"}</h3><div class="tbl"><table><tr>${c.map(x=>`<th>${esc(x)}</th>`).join("")}</tr>${rows.map(rw=>`<tr>${rw.map(v=>`<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</table></div>`;
+    }
+    if(r.insight){h+=`<h3>Insight</h3><div class="insight">${esc(r.insight)}</div>`}
+    if(r.answer){h+=`<h3>Response</h3><div class="insight">${esc(r.answer)}</div>`}
+    h+=`<details><summary>Raw model output</summary><pre style="margin-top:8px">${esc(r.raw_stage1||"")}</pre></details>`;
+  }
+  $("out").innerHTML=h;$("out").hidden=false;
+}
+$("go").onclick=async()=>{
+  const q=$("q").value.trim();if(!q){$("status").textContent="Enter a question first.";return}
+  $("go").disabled=true;$("status").textContent="Thinking…";
+  try{
+    const res=await fetch("/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({mode:MODE,db:$("db").value,schema:$("schema").value,question:q})});
+    renderResult(await res.json());$("status").textContent="";
+  }catch(e){renderResult({error:"Request failed: "+e.message});$("status").textContent=""}
+  $("go").disabled=false;
+};
+$("copyQ").onclick=async()=>{const b=$("copyQ");try{await navigator.clipboard.writeText($("q").value);b.textContent="Copied"}catch(e){b.textContent="Select and Ctrl+C"}setTimeout(()=>b.textContent="Copy question",1300)};
+$("q").addEventListener("keydown",e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey))$("go").click()});
+$("db").onchange=()=>setDb($("db").value,"employees");
+(async()=>{
+  try{DBS=await (await fetch("/api/databases")).json()}catch(e){$("status").textContent="Backend not reachable. Start it with: python -m viki_slm_125m.app.ui_server"}
+  renderTabs();setupMode();renderSamples();
+})();
+</script>
+</body>
+</html>

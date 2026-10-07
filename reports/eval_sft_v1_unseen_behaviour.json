@@ -1,0 +1,17 @@
+{
+  "refusal": {
+    "n": 100,
+    "correct": 0.0,
+    "wrote_sql_instead": 0.99
+  },
+  "missing": {
+    "n": 100,
+    "correct": 0.0,
+    "wrote_sql_instead": 1.0
+  },
+  "clarify": {
+    "n": 100,
+    "correct": 0.0,
+    "wrote_sql_instead": 1.0
+  }
+}

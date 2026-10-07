@@ -1,0 +1,142 @@
+"""SFT v3 templates: derived metrics, date-function filters, rates via CASE, and more pandas tasks.
+
+None of these is a held-out evaluation template; the held-out four (monthly orders, average PO value by
+country, late-payment rate by segment, balance by country) stay out of training.
+"""
+
+from __future__ import annotations
+
+from viki_slm_125m.sft.domain.domain_templates import PyTemplate, SqlTemplate, TOP_N, YEAR, _PIPE, _SC, choice
+
+_FIN = "finance"
+
+V3_SQL_TEMPLATES: tuple[SqlTemplate, ...] = (
+    # ---- derived value (quantity x price)
+    SqlTemplate(_SC, "sc_spend_category",
+                ("What is the total purchase spend for each product category?", "Show spend (quantity times unit price) by product category, largest first."),
+                "SELECT p.category, ROUND(SUM(po.quantity * po.unit_price), 2) AS total_spend FROM purchase_orders po JOIN products p ON p.product_id = po.product_id GROUP BY p.category ORDER BY total_spend DESC"),
+    SqlTemplate(_SC, "sc_avg_order_value_status",
+                ("What is the average order value for each purchase order status?", "Show the mean order value (quantity x unit price) per status."),
+                "SELECT status, ROUND(AVG(quantity * unit_price), 2) AS avg_order_value FROM purchase_orders GROUP BY status ORDER BY avg_order_value DESC"),
+    SqlTemplate(_SC, "sc_max_order_supplier",
+                ("Which {n} suppliers have the largest single order value?", "List the top {n} suppliers by their biggest order (quantity times unit price)."),
+                "SELECT s.name, ROUND(MAX(po.quantity * po.unit_price), 2) AS max_order_value FROM purchase_orders po JOIN suppliers s ON s.supplier_id = po.supplier_id GROUP BY s.name ORDER BY max_order_value DESC LIMIT {n}",
+                {"n": TOP_N}),
+    SqlTemplate(_SC, "sc_stock_value_category",
+                ("What is the stock value of each product category?", "Show on-hand quantity times unit cost, summed per category."),
+                "SELECT p.category, ROUND(SUM(i.quantity_on_hand * p.unit_cost), 2) AS stock_value FROM inventory i JOIN products p ON p.product_id = i.product_id GROUP BY p.category ORDER BY stock_value DESC"),
+    SqlTemplate(_FIN, "fin_avg_repay_ratio_segment",
+                ("What share of the amount due was actually paid, by customer segment?", "Show the average paid-to-due ratio of repayments per segment."),
+                "SELECT c.segment, ROUND(AVG(r.amount_paid * 1.0 / r.amount_due), 3) AS paid_ratio FROM repayments r JOIN loans l ON l.loan_id = r.loan_id JOIN customers c ON c.customer_id = l.customer_id WHERE r.amount_due > 0 GROUP BY c.segment ORDER BY paid_ratio DESC"),
+    SqlTemplate(_FIN, "fin_net_gl_center",
+                ("What is the net amount (debit minus credit) per cost center?", "Show debit minus credit in the general ledger for each cost center."),
+                "SELECT cost_center, ROUND(SUM(debit - credit), 2) AS net_amount FROM gl_entries GROUP BY cost_center ORDER BY net_amount DESC"),
+    # ---- date-function filters (strftime on a column, not equality with a bare year)
+    SqlTemplate(_SC, "sc_po_year_status",
+                ("How many purchase orders were placed in {year}, by status?", "Count the {year} purchase orders for each status."),
+                "SELECT status, COUNT(*) AS orders FROM purchase_orders WHERE strftime('%Y', order_date) = '{year}' GROUP BY status ORDER BY orders DESC",
+                {"year": YEAR}),
+    SqlTemplate(_SC, "sc_monthly_spend",
+                ("What was the total purchase spend in each month of {year}?", "Show monthly order spend (quantity x unit price) for {year}."),
+                "SELECT strftime('%Y-%m', order_date) AS month, ROUND(SUM(quantity * unit_price), 2) AS spend FROM purchase_orders WHERE strftime('%Y', order_date) = '{year}' GROUP BY month ORDER BY month",
+                {"year": YEAR}),
+    SqlTemplate(_SC, "sc_monthly_shipments",
+                ("How many shipments left each month of {year}?", "Show the number of shipments per month in {year}."),
+                "SELECT strftime('%Y-%m', ship_date) AS month, COUNT(*) AS shipments FROM shipments WHERE strftime('%Y', ship_date) = '{year}' GROUP BY month ORDER BY month",
+                {"year": YEAR}),
+    SqlTemplate(_FIN, "fin_txn_year_channel",
+                ("What was the total transaction amount in {year} for each channel?", "Show {year} transaction totals by channel."),
+                "SELECT channel, ROUND(SUM(amount), 2) AS total_amount FROM transactions WHERE strftime('%Y', txn_date) = '{year}' GROUP BY channel ORDER BY total_amount DESC",
+                {"year": YEAR}),
+    SqlTemplate(_FIN, "fin_monthly_debits",
+                ("What is the total debit amount in each month of {year}?", "Show monthly debit transaction totals for {year}."),
+                "SELECT strftime('%Y-%m', txn_date) AS month, ROUND(SUM(amount), 2) AS debit_total FROM transactions WHERE txn_type = 'debit' AND strftime('%Y', txn_date) = '{year}' GROUP BY month ORDER BY month",
+                {"year": YEAR}),
+    SqlTemplate(_FIN, "fin_loans_by_origination_year",
+                ("How many loans were originated in each year?", "Count loans per origination year."),
+                "SELECT strftime('%Y', origination_date) AS year, COUNT(*) AS loans FROM loans GROUP BY year ORDER BY year"),
+    # ---- rates via CASE
+    SqlTemplate(_SC, "sc_late_rate_category",
+                ("What percentage of received orders were late, by product category?", "Show the late-delivery rate per product category for received orders."),
+                "SELECT p.category, ROUND(100.0 * SUM(CASE WHEN po.received_date > po.promised_date THEN 1 ELSE 0 END) / COUNT(*), 1) AS late_pct FROM purchase_orders po JOIN products p ON p.product_id = po.product_id WHERE po.status = 'received' GROUP BY p.category ORDER BY late_pct DESC"),
+    SqlTemplate(_SC, "sc_cancel_rate_supplier",
+                ("What is the cancellation rate of purchase orders for each supplier?", "Show the percentage of cancelled orders per supplier, highest first."),
+                "SELECT s.name, ROUND(100.0 * SUM(CASE WHEN po.status = 'cancelled' THEN 1 ELSE 0 END) / COUNT(*), 1) AS cancel_pct FROM purchase_orders po JOIN suppliers s ON s.supplier_id = po.supplier_id GROUP BY s.name ORDER BY cancel_pct DESC"),
+    SqlTemplate(_FIN, "fin_late_rate_loan_status",
+                ("What percentage of repayments were paid late for each loan status?", "Show the late-payment rate by loan status."),
+                "SELECT l.status, ROUND(100.0 * SUM(CASE WHEN r.paid_date > r.due_date THEN 1 ELSE 0 END) / COUNT(*), 1) AS late_pct FROM repayments r JOIN loans l ON l.loan_id = r.loan_id WHERE r.paid_date IS NOT NULL GROUP BY l.status ORDER BY late_pct DESC"),
+    SqlTemplate(_FIN, "fin_late_rate_risk",
+                ("What share of repayments are late for each customer risk rating?", "Show the percentage of late repayments per risk rating."),
+                "SELECT c.risk_rating, ROUND(100.0 * SUM(CASE WHEN r.paid_date > r.due_date THEN 1 ELSE 0 END) / COUNT(*), 1) AS late_pct FROM repayments r JOIN loans l ON l.loan_id = r.loan_id JOIN customers c ON c.customer_id = l.customer_id WHERE r.paid_date IS NOT NULL GROUP BY c.risk_rating ORDER BY late_pct DESC"),
+    SqlTemplate(_FIN, "fin_debit_share_channel",
+                ("What percentage of transactions are debits for each channel?", "Show the debit share by channel."),
+                "SELECT channel, ROUND(100.0 * SUM(CASE WHEN txn_type = 'debit' THEN 1 ELSE 0 END) / COUNT(*), 1) AS debit_pct FROM transactions GROUP BY channel ORDER BY debit_pct DESC"),
+)
+
+V3_PY_TEMPLATES: tuple[PyTemplate, ...] = (
+    PyTemplate(_SC, "py_spend_category",
+               ("What is the total purchase spend for each product category?",),
+               ("purchase_orders", "products"),
+               "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\nproducts = pd.read_csv('products.csv')\nm = po.merge(products, on='product_id')\n"
+               "m['spend'] = m['quantity'] * m['unit_price']\nres = m.groupby('category', as_index=False)['spend'].sum().round(2).sort_values('spend', ascending=False)\n" + _PIPE),
+    PyTemplate(_SC, "py_avg_order_value_status",
+               ("What is the average order value for each purchase order status?",),
+               ("purchase_orders",),
+               "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\npo['value'] = po['quantity'] * po['unit_price']\n"
+               "res = po.groupby('status', as_index=False)['value'].mean().round(2).sort_values('value', ascending=False)\n" + _PIPE),
+    PyTemplate(_SC, "py_freight_carrier",
+               ("What is the total freight cost for each carrier?",),
+               ("shipments",),
+               "import pandas as pd\nsh = pd.read_csv('shipments.csv')\nres = sh.groupby('carrier', as_index=False)['freight_cost'].sum().round(2).sort_values('freight_cost', ascending=False)\n" + _PIPE),
+    PyTemplate(_SC, "py_lead_time_country",
+               ("What is the average supplier lead time by country?",),
+               ("suppliers",),
+               "import pandas as pd\nsup = pd.read_csv('suppliers.csv')\nres = sup.groupby('country', as_index=False)['lead_time_days'].mean().round(1).sort_values('lead_time_days', ascending=False)\n" + _PIPE),
+    PyTemplate(_SC, "py_orders_by_status",
+               ("How many purchase orders are there in each status?",),
+               ("purchase_orders",),
+               "import pandas as pd\npo = pd.read_csv('purchase_orders.csv')\nres = po.groupby('status').size().reset_index(name='orders').sort_values('orders', ascending=False)\n" + _PIPE),
+    PyTemplate(_SC, "py_inventory_value",
+               ("What is the total inventory value for each product category?",),
+               ("inventory", "products"),
+               "import pandas as pd\ninv = pd.read_csv('inventory.csv')\nproducts = pd.read_csv('products.csv')\nm = inv.merge(products, on='product_id')\n"
+               "m['value'] = m['quantity_on_hand'] * m['unit_cost']\nres = m.groupby('category', as_index=False)['value'].sum().round(2).sort_values('value', ascending=False)\n" + _PIPE),
+    PyTemplate(_SC, "py_monthly_spend",
+               ("What was the total purchase spend in each month of {year}?",),
+               ("purchase_orders",),
+               "import pandas as pd\npo = pd.read_csv('purchase_orders.csv', parse_dates=['order_date'])\npo = po[po['order_date'].dt.year == {year}].copy()\n"
+               "po['spend'] = po['quantity'] * po['unit_price']\nres = po.groupby(po['order_date'].dt.strftime('%Y-%m'))['spend'].sum().round(2).reset_index()\nres.columns = ['month', 'spend']\n" + _PIPE,
+               {"year": YEAR}),
+    PyTemplate(_FIN, "py_txn_type_total",
+               ("What is the total transaction amount for each transaction type?",),
+               ("transactions",),
+               "import pandas as pd\ntx = pd.read_csv('transactions.csv')\nres = tx.groupby('txn_type', as_index=False)['amount'].sum().round(2).sort_values('amount', ascending=False)\n" + _PIPE),
+    PyTemplate(_FIN, "py_loan_status_count",
+               ("How many loans are there in each status?",),
+               ("loans",),
+               "import pandas as pd\nloans = pd.read_csv('loans.csv')\nres = loans.groupby('status').size().reset_index(name='loans').sort_values('loans', ascending=False)\n" + _PIPE),
+    PyTemplate(_FIN, "py_avg_principal_status",
+               ("What is the average loan principal for each loan status?",),
+               ("loans",),
+               "import pandas as pd\nloans = pd.read_csv('loans.csv')\nres = loans.groupby('status', as_index=False)['principal'].mean().round(2).sort_values('principal', ascending=False)\n" + _PIPE),
+    PyTemplate(_FIN, "py_monthly_debits",
+               ("What is the total debit amount in each month of {year}?",),
+               ("transactions",),
+               "import pandas as pd\ntx = pd.read_csv('transactions.csv', parse_dates=['txn_date'])\ntx = tx[(tx['txn_type'] == 'debit') & (tx['txn_date'].dt.year == {year})]\n"
+               "res = tx.groupby(tx['txn_date'].dt.strftime('%Y-%m'))['amount'].sum().round(2).reset_index()\nres.columns = ['month', 'debit_total']\n" + _PIPE,
+               {"year": YEAR}),
+    PyTemplate(_FIN, "py_segment_count",
+               ("How many customers are in each segment?",),
+               ("customers",),
+               "import pandas as pd\ncust = pd.read_csv('customers.csv')\nres = cust.groupby('segment').size().reset_index(name='customers').sort_values('customers', ascending=False)\n" + _PIPE),
+    PyTemplate(_FIN, "py_net_gl_center",
+               ("What is the net amount (debit minus credit) for each cost center?",),
+               ("gl_entries",),
+               "import pandas as pd\ngl = pd.read_csv('gl_entries.csv')\ngl['net'] = gl['debit'] - gl['credit']\nres = gl.groupby('cost_center', as_index=False)['net'].sum().round(2).sort_values('net', ascending=False)\n" + _PIPE),
+    PyTemplate(_FIN, "py_late_rate_loan_status",
+               ("What percentage of repayments were paid late for each loan status?",),
+               ("repayments", "loans"),
+               "import pandas as pd\nr = pd.read_csv('repayments.csv', parse_dates=['due_date', 'paid_date'])\nloans = pd.read_csv('loans.csv')\n"
+               "m = r.merge(loans, on='loan_id')\nm = m[m['paid_date'].notna()].copy()\nm['late'] = m['paid_date'] > m['due_date']\n"
+               "res = (m.groupby('status')['late'].mean() * 100).round(1).reset_index()\nres.columns = ['status', 'late_pct']\nres = res.sort_values('late_pct', ascending=False)\n" + _PIPE),
+)

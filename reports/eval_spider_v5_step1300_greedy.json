@@ -1,0 +1,30 @@
+{
+  "checkpoint": "artifacts/sft_v5/best_step1300.pt",
+  "questions": 1034,
+  "evaluated": 1034,
+  "too_long": 0,
+  "scores_on_evaluated": {
+    "k=0": {
+      "execution_accuracy": 0.22147001934235977,
+      "tolerant": 0.22147001934235977,
+      "executes_rate": 0.38781431334622823
+    },
+    "k=4": {
+      "execution_accuracy": 0.22147001934235977,
+      "tolerant": 0.22147001934235977,
+      "executes_rate": 0.38781431334622823
+    }
+  },
+  "scores_all_questions": {
+    "k=0": {
+      "execution_accuracy": 0.22147001934235977,
+      "tolerant": 0.22147001934235977,
+      "executes_rate": 0.38781431334622823
+    },
+    "k=4": {
+      "execution_accuracy": 0.22147001934235977,
+      "tolerant": 0.22147001934235977,
+      "executes_rate": 0.38781431334622823
+    }
+  }
+}

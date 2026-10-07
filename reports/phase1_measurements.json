@@ -1,0 +1,96 @@
+{
+  "text": [
+    {
+      "source": "notebooks",
+      "docs_sampled": 2000,
+      "avg_chars": 8680,
+      "total_rows": 580195,
+      "raw_tokens_upper_bound": 1259023585,
+      "planned_budget": 640000000
+    },
+    {
+      "source": "fineweb-edu",
+      "docs_sampled": 2000,
+      "avg_chars": 4976,
+      "total_rows": 9672101,
+      "raw_tokens_upper_bound": 12031381535,
+      "planned_budget": 1760000000
+    },
+    {
+      "source": "cosmopedia",
+      "docs_sampled": 2000,
+      "avg_chars": 3741,
+      "total_rows": 39134000,
+      "raw_tokens_upper_bound": 36600166443,
+      "planned_budget": 640000000
+    },
+    {
+      "source": "finance-sec",
+      "docs_sampled": 2000,
+      "avg_chars": 101885,
+      "total_rows": 48543,
+      "raw_tokens_upper_bound": 1236453995,
+      "planned_budget": 720000000
+    },
+    {
+      "source": "math",
+      "docs_sampled": 2000,
+      "avg_chars": 5023,
+      "total_rows": 6699493,
+      "raw_tokens_upper_bound": 8412408483,
+      "planned_budget": 400000000
+    }
+  ],
+  "stack_edu": [
+    {
+      "config": "Python",
+      "files": 300000,
+      "permissive_files": 54111,
+      "permissive_file_share": 0.18037,
+      "permissive_byte_share": 0.26626915489441566,
+      "permissive_int_score_4plus_files": 6322,
+      "total_bytes": 815125545,
+      "permissive_bytes": 217042790
+    },
+    {
+      "config": "SQL",
+      "files": 300000,
+      "permissive_files": 47792,
+      "permissive_file_share": 0.15930666666666668,
+      "permissive_byte_share": 0.2060400541802173,
+      "permissive_int_score_4plus_files": 13455,
+      "total_bytes": 2293981939,
+      "permissive_bytes": 472652163
+    }
+  ],
+  "fetch": [
+    {
+      "config": "Python",
+      "threads": 64,
+      "error_kinds": {},
+      "avg_chars_ok": 2020,
+      "attempted": 10000,
+      "ok": 10000,
+      "missing": 0,
+      "errors": 0,
+      "files_per_sec": 476.5495802708048,
+      "failure_rate": 0.0,
+      "avg_bytes_ok": 2020.1689,
+      "elapsed_s": 20.984175443649292
+    },
+    {
+      "config": "SQL",
+      "threads": 64,
+      "error_kinds": {},
+      "avg_chars_ok": 3247,
+      "attempted": 10000,
+      "ok": 10000,
+      "missing": 0,
+      "errors": 0,
+      "files_per_sec": 454.125113639442,
+      "failure_rate": 0.0,
+      "avg_bytes_ok": 3246.7994,
+      "elapsed_s": 22.020363330841064
+    }
+  ]
+}

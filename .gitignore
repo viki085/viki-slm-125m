@@ -1,0 +1,67 @@
+# ---------------------------------------------------------------------------
+# Viki SLM 125M: what stays out of the GitHub repository.
+# Rules that start with "/" apply only at the project root, so source folders
+# that share a name (viki_slm_125m/data/) are NOT ignored.
+# (Comments must be on their own line: git does not support trailing comments.)
+# ---------------------------------------------------------------------------
+
+# --- secrets: never commit. Copy .env.example to .env.local and fill it in ---
+.env
+.env.*
+!.env.example
+
+# --- large local data and run output (GitHub rejects files over 100 MB) ---
+# training checkpoints and tokenizer copies (about 13 GB)
+/artifacts/
+# SFT datasets, Spider and other benchmark data (about 2.5 GB)
+/data/
+# training and server logs
+/logs/
+# the exported weights go to Hugging Face, not GitHub
+/models/**/*.safetensors
+
+# --- model and data file types, anywhere in the tree ---
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+*.onnx
+*.npy
+*.npz
+*.parquet
+*.zip
+*.tar
+*.gz
+*.7z
+
+# --- private or machine-specific reports ---
+# cloud billing with workspace object ids
+/reports/modal_billing_raw.json
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# --- test, lint and tool caches ---
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# --- editors, agents and operating system ---
+.idea/
+.vscode/
+.claude/
+.playwright-mcp/
+.DS_Store
+Thumbs.db
+desktop.ini

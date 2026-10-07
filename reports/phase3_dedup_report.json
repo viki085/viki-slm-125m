@@ -1,0 +1,74 @@
+{
+  "global": {
+    "exact_duplicates": 16167,
+    "docs_hashed": 5363282,
+    "near_duplicates": 1958,
+    "note": "global counts from the first full run; decontamination re-run with min_run=10"
+  },
+  "sources": {
+    "python": {
+      "kept": 2378735,
+      "est_tokens": 2339004666,
+      "exact_dup": 1286,
+      "near_dup": 0,
+      "contaminated": {
+        "mbpp": 210,
+        "ds1000": 109,
+        "humaneval": 30,
+        "spider": 1
+      }
+    },
+    "sql": {
+      "kept": 261613,
+      "est_tokens": 290038323,
+      "exact_dup": 1267,
+      "near_dup": 0,
+      "contaminated": {}
+    },
+    "notebooks": {
+      "kept": 273143,
+      "est_tokens": 599879362,
+      "exact_dup": 2,
+      "near_dup": 0,
+      "contaminated": {
+        "ds1000": 36,
+        "mbpp": 11,
+        "humaneval": 2
+      }
+    },
+    "fineweb-edu": {
+      "kept": 1471632,
+      "est_tokens": 1747731305,
+      "exact_dup": 10734,
+      "near_dup": 0,
+      "contaminated": {}
+    },
+    "cosmopedia": {
+      "kept": 680519,
+      "est_tokens": 638005867,
+      "exact_dup": 1890,
+      "near_dup": 0,
+      "contaminated": {
+        "mbpp": 2,
+        "ds1000": 2
+      }
+    },
+    "finance-sec": {
+      "kept": 27040,
+      "est_tokens": 662840506,
+      "exact_dup": 988,
+      "near_dup": 970,
+      "contaminated": {}
+    },
+    "math": {
+      "kept": 253049,
+      "est_tokens": 333434266,
+      "exact_dup": 0,
+      "near_dup": 0,
+      "contaminated": {
+        "mbpp": 7,
+        "humaneval": 4
+      }
+    }
+  }
+}

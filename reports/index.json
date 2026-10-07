@@ -1,0 +1,1219 @@
+{
+  "seq_len": 2048,
+  "dtype": "uint16",
+  "train_windows": 3434020,
+  "val_windows": 34769,
+  "train_tokens": 7032872960,
+  "val_tokens": 71206912,
+  "effective_train_tokens": 7493398528,
+  "sources": {
+    "python": {
+      "train_windows": 1304103,
+      "val_windows": 13196,
+      "epochs": 1.0,
+      "files": 39,
+      "train_tokens": 2670802944,
+      "val_tokens": 27025408,
+      "effective_train_tokens": 2670802944
+    },
+    "sql": {
+      "train_windows": 224866,
+      "val_windows": 2279,
+      "epochs": 2.0,
+      "files": 15,
+      "train_tokens": 460525568,
+      "val_tokens": 4667392,
+      "effective_train_tokens": 921051136
+    },
+    "notebooks": {
+      "train_windows": 373853,
+      "val_windows": 3789,
+      "epochs": 1.0,
+      "files": 30,
+      "train_tokens": 765650944,
+      "val_tokens": 7759872,
+      "effective_train_tokens": 765650944
+    },
+    "fineweb-edu": {
+      "train_windows": 781795,
+      "val_windows": 7903,
+      "epochs": 1.0,
+      "files": 14,
+      "train_tokens": 1601116160,
+      "val_tokens": 16185344,
+      "effective_train_tokens": 1601116160
+    },
+    "cosmopedia": {
+      "train_windows": 250761,
+      "val_windows": 2544,
+      "epochs": 1.0,
+      "files": 24,
+      "train_tokens": 513558528,
+      "val_tokens": 5210112,
+      "effective_train_tokens": 513558528
+    },
+    "finance-sec": {
+      "train_windows": 293675,
+      "val_windows": 2978,
+      "epochs": 1.0,
+      "files": 20,
+      "train_tokens": 601446400,
+      "val_tokens": 6098944,
+      "effective_train_tokens": 601446400
+    },
+    "math": {
+      "train_windows": 204967,
+      "val_windows": 2080,
+      "epochs": 1.0,
+      "files": 20,
+      "train_tokens": 419772416,
+      "val_tokens": 4259840,
+      "effective_train_tokens": 419772416
+    }
+  },
+  "realized_mix": {
+    "python": 0.356420779439425,
+    "sql": 0.12291500746402047,
+    "notebooks": 0.10217672810795417,
+    "fineweb-edu": 0.21367022640224373,
+    "cosmopedia": 0.06853479447022946,
+    "finance-sec": 0.0802635009672343,
+    "math": 0.05601896314889286
+  },
+  "shards": [
+    {
+      "source": "python",
+      "file": "shard-000-00.jsonl",
+      "train_windows": 33483,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-000-01.jsonl",
+      "train_windows": 33433,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-000-02.jsonl",
+      "train_windows": 33328,
+      "val_windows": 337,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-000-03.jsonl",
+      "train_windows": 33463,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-000-04.jsonl",
+      "train_windows": 33415,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-000-05.jsonl",
+      "train_windows": 33406,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-000-06.jsonl",
+      "train_windows": 33423,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-000-07.jsonl",
+      "train_windows": 33516,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-001-00.jsonl",
+      "train_windows": 33418,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-001-01.jsonl",
+      "train_windows": 33465,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-001-02.jsonl",
+      "train_windows": 33472,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-001-03.jsonl",
+      "train_windows": 33437,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-001-04.jsonl",
+      "train_windows": 33524,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-001-05.jsonl",
+      "train_windows": 33441,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-001-06.jsonl",
+      "train_windows": 33490,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-001-07.jsonl",
+      "train_windows": 33382,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-002-00.jsonl",
+      "train_windows": 33404,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-002-01.jsonl",
+      "train_windows": 33459,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-002-02.jsonl",
+      "train_windows": 33405,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-002-03.jsonl",
+      "train_windows": 33504,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-002-04.jsonl",
+      "train_windows": 33468,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-002-05.jsonl",
+      "train_windows": 33396,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-002-06.jsonl",
+      "train_windows": 33463,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-002-07.jsonl",
+      "train_windows": 33372,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-003-00.jsonl",
+      "train_windows": 33489,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-003-01.jsonl",
+      "train_windows": 33467,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-003-02.jsonl",
+      "train_windows": 33392,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-003-03.jsonl",
+      "train_windows": 33473,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-003-04.jsonl",
+      "train_windows": 33443,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-003-05.jsonl",
+      "train_windows": 33378,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-003-06.jsonl",
+      "train_windows": 33414,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-003-07.jsonl",
+      "train_windows": 33440,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-004-00.jsonl",
+      "train_windows": 33384,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-004-01.jsonl",
+      "train_windows": 33375,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-004-02.jsonl",
+      "train_windows": 33475,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-004-03.jsonl",
+      "train_windows": 33363,
+      "val_windows": 337,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-004-04.jsonl",
+      "train_windows": 33460,
+      "val_windows": 338,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-004-06.jsonl",
+      "train_windows": 33495,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "python",
+      "file": "shard-004-07.jsonl",
+      "train_windows": 33488,
+      "val_windows": 339,
+      "epochs": 1.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-00.jsonl",
+      "train_windows": 15150,
+      "val_windows": 154,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-01.jsonl",
+      "train_windows": 15169,
+      "val_windows": 154,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-02.jsonl",
+      "train_windows": 15229,
+      "val_windows": 154,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-03.jsonl",
+      "train_windows": 14842,
+      "val_windows": 150,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-04.jsonl",
+      "train_windows": 14697,
+      "val_windows": 149,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-05.jsonl",
+      "train_windows": 14995,
+      "val_windows": 152,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-06.jsonl",
+      "train_windows": 15013,
+      "val_windows": 152,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-07.jsonl",
+      "train_windows": 15119,
+      "val_windows": 153,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-08.jsonl",
+      "train_windows": 15031,
+      "val_windows": 152,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-09.jsonl",
+      "train_windows": 14614,
+      "val_windows": 148,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-10.jsonl",
+      "train_windows": 14826,
+      "val_windows": 150,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-11.jsonl",
+      "train_windows": 14899,
+      "val_windows": 151,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-12.jsonl",
+      "train_windows": 15270,
+      "val_windows": 155,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-14.jsonl",
+      "train_windows": 15061,
+      "val_windows": 153,
+      "epochs": 2.0
+    },
+    {
+      "source": "sql",
+      "file": "shard-000-15.jsonl",
+      "train_windows": 14951,
+      "val_windows": 152,
+      "epochs": 2.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-000-00.jsonl",
+      "train_windows": 12438,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-000-01.jsonl",
+      "train_windows": 12448,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-000-02.jsonl",
+      "train_windows": 12465,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-000-03.jsonl",
+      "train_windows": 12453,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-001-00.jsonl",
+      "train_windows": 12459,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-001-01.jsonl",
+      "train_windows": 12491,
+      "val_windows": 127,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-001-02.jsonl",
+      "train_windows": 12459,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-001-03.jsonl",
+      "train_windows": 12441,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-002-00.jsonl",
+      "train_windows": 12421,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-002-01.jsonl",
+      "train_windows": 12415,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-002-03.jsonl",
+      "train_windows": 12493,
+      "val_windows": 127,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-003-00.jsonl",
+      "train_windows": 12455,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-003-02.jsonl",
+      "train_windows": 12459,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-003-03.jsonl",
+      "train_windows": 12573,
+      "val_windows": 128,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-004-00.jsonl",
+      "train_windows": 12468,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-004-01.jsonl",
+      "train_windows": 12487,
+      "val_windows": 127,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-004-02.jsonl",
+      "train_windows": 12477,
+      "val_windows": 127,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-004-03.jsonl",
+      "train_windows": 12489,
+      "val_windows": 127,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-005-00.jsonl",
+      "train_windows": 12474,
+      "val_windows": 127,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-005-01.jsonl",
+      "train_windows": 12464,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-005-02.jsonl",
+      "train_windows": 12425,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-005-03.jsonl",
+      "train_windows": 12434,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-006-00.jsonl",
+      "train_windows": 12438,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-006-01.jsonl",
+      "train_windows": 12444,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-006-02.jsonl",
+      "train_windows": 12433,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-006-03.jsonl",
+      "train_windows": 12463,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-007-00.jsonl",
+      "train_windows": 12456,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-007-01.jsonl",
+      "train_windows": 12520,
+      "val_windows": 127,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-007-02.jsonl",
+      "train_windows": 12456,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "notebooks",
+      "file": "shard-007-03.jsonl",
+      "train_windows": 12455,
+      "val_windows": 126,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-000-00.jsonl",
+      "train_windows": 56329,
+      "val_windows": 569,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-001-00.jsonl",
+      "train_windows": 56062,
+      "val_windows": 567,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-002-00.jsonl",
+      "train_windows": 55905,
+      "val_windows": 565,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-003-00.jsonl",
+      "train_windows": 55935,
+      "val_windows": 565,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-004-00.jsonl",
+      "train_windows": 55338,
+      "val_windows": 559,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-005-00.jsonl",
+      "train_windows": 56089,
+      "val_windows": 567,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-006-00.jsonl",
+      "train_windows": 56002,
+      "val_windows": 566,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-007-00.jsonl",
+      "train_windows": 55971,
+      "val_windows": 566,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-008-00.jsonl",
+      "train_windows": 55858,
+      "val_windows": 565,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-009-00.jsonl",
+      "train_windows": 55922,
+      "val_windows": 565,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-010-00.jsonl",
+      "train_windows": 55747,
+      "val_windows": 564,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-011-00.jsonl",
+      "train_windows": 55589,
+      "val_windows": 562,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-012-00.jsonl",
+      "train_windows": 55572,
+      "val_windows": 562,
+      "epochs": 1.0
+    },
+    {
+      "source": "fineweb-edu",
+      "file": "shard-013-00.jsonl",
+      "train_windows": 55476,
+      "val_windows": 561,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-000-00.jsonl",
+      "train_windows": 10475,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-001-00.jsonl",
+      "train_windows": 10476,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-002-00.jsonl",
+      "train_windows": 10471,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-003-00.jsonl",
+      "train_windows": 10475,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-004-00.jsonl",
+      "train_windows": 10459,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-005-00.jsonl",
+      "train_windows": 10476,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-006-00.jsonl",
+      "train_windows": 10457,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-007-00.jsonl",
+      "train_windows": 10452,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-008-00.jsonl",
+      "train_windows": 10464,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-009-00.jsonl",
+      "train_windows": 10456,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-010-00.jsonl",
+      "train_windows": 10448,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-011-00.jsonl",
+      "train_windows": 10454,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-012-00.jsonl",
+      "train_windows": 10448,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-013-00.jsonl",
+      "train_windows": 10449,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-014-00.jsonl",
+      "train_windows": 10451,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-015-00.jsonl",
+      "train_windows": 10427,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-016-00.jsonl",
+      "train_windows": 10432,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-017-00.jsonl",
+      "train_windows": 10436,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-018-00.jsonl",
+      "train_windows": 10431,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-019-00.jsonl",
+      "train_windows": 10433,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-020-00.jsonl",
+      "train_windows": 10428,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-021-00.jsonl",
+      "train_windows": 10433,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-022-00.jsonl",
+      "train_windows": 10416,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "cosmopedia",
+      "file": "shard-023-00.jsonl",
+      "train_windows": 10414,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-000-00.jsonl",
+      "train_windows": 15899,
+      "val_windows": 161,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-000-01.jsonl",
+      "train_windows": 14865,
+      "val_windows": 151,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-000-02.jsonl",
+      "train_windows": 14878,
+      "val_windows": 151,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-000-03.jsonl",
+      "train_windows": 14301,
+      "val_windows": 145,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-001-00.jsonl",
+      "train_windows": 15397,
+      "val_windows": 156,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-001-01.jsonl",
+      "train_windows": 14959,
+      "val_windows": 152,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-001-02.jsonl",
+      "train_windows": 14540,
+      "val_windows": 147,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-001-03.jsonl",
+      "train_windows": 14766,
+      "val_windows": 150,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-002-00.jsonl",
+      "train_windows": 15086,
+      "val_windows": 153,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-002-01.jsonl",
+      "train_windows": 14469,
+      "val_windows": 147,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-002-02.jsonl",
+      "train_windows": 14023,
+      "val_windows": 142,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-002-03.jsonl",
+      "train_windows": 14025,
+      "val_windows": 142,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-003-00.jsonl",
+      "train_windows": 15101,
+      "val_windows": 153,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-003-01.jsonl",
+      "train_windows": 14455,
+      "val_windows": 147,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-003-02.jsonl",
+      "train_windows": 14339,
+      "val_windows": 145,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-003-03.jsonl",
+      "train_windows": 14124,
+      "val_windows": 143,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-004-00.jsonl",
+      "train_windows": 15180,
+      "val_windows": 154,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-004-01.jsonl",
+      "train_windows": 14659,
+      "val_windows": 149,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-004-02.jsonl",
+      "train_windows": 14504,
+      "val_windows": 147,
+      "epochs": 1.0
+    },
+    {
+      "source": "finance-sec",
+      "file": "shard-004-03.jsonl",
+      "train_windows": 14105,
+      "val_windows": 143,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-000-00.jsonl",
+      "train_windows": 10332,
+      "val_windows": 105,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-001-00.jsonl",
+      "train_windows": 10278,
+      "val_windows": 104,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-002-00.jsonl",
+      "train_windows": 10409,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-003-00.jsonl",
+      "train_windows": 10219,
+      "val_windows": 104,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-004-00.jsonl",
+      "train_windows": 10200,
+      "val_windows": 104,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-007-00.jsonl",
+      "train_windows": 10261,
+      "val_windows": 104,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-008-00.jsonl",
+      "train_windows": 10423,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-011-00.jsonl",
+      "train_windows": 10260,
+      "val_windows": 104,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-012-00.jsonl",
+      "train_windows": 10192,
+      "val_windows": 103,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-013-00.jsonl",
+      "train_windows": 10120,
+      "val_windows": 103,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-014-00.jsonl",
+      "train_windows": 10203,
+      "val_windows": 104,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-015-00.jsonl",
+      "train_windows": 10157,
+      "val_windows": 103,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-016-00.jsonl",
+      "train_windows": 10239,
+      "val_windows": 104,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-017-00.jsonl",
+      "train_windows": 10264,
+      "val_windows": 104,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-018-00.jsonl",
+      "train_windows": 10153,
+      "val_windows": 103,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-019-00.jsonl",
+      "train_windows": 10477,
+      "val_windows": 106,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-020-00.jsonl",
+      "train_windows": 10174,
+      "val_windows": 103,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-021-00.jsonl",
+      "train_windows": 10195,
+      "val_windows": 103,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-022-00.jsonl",
+      "train_windows": 10280,
+      "val_windows": 104,
+      "epochs": 1.0
+    },
+    {
+      "source": "math",
+      "file": "shard-023-00.jsonl",
+      "train_windows": 10131,
+      "val_windows": 103,
+      "epochs": 1.0
+    }
+  ]
+}

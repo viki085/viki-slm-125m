@@ -1,0 +1,36 @@
+{
+  "steps": 572,
+  "total_steps": 572,
+  "stopped_by_budget": false,
+  "first_loss": 10.545090079307556,
+  "final_loss": 2.669022351503372,
+  "val_loss_first": {
+    "python": 4.965813159942627,
+    "sql": 3.714663505554199,
+    "notebooks": 4.8602614402771,
+    "fineweb-edu": 6.311582088470459,
+    "cosmopedia": 6.302070617675781,
+    "finance-sec": 5.218892574310303,
+    "math": 5.481797695159912
+  },
+  "val_loss_last": {
+    "python": 2.14776349067688,
+    "sql": 1.1924525499343872,
+    "notebooks": 1.973854422569275,
+    "fineweb-edu": 4.290036201477051,
+    "cosmopedia": 3.606889247894287,
+    "finance-sec": 2.6153509616851807,
+    "math": 3.0066044330596924
+  },
+  "tokens_per_sec_1gpu": 404487,
+  "elapsed_s": 825,
+  "pilot_cost_usd": 0.91,
+  "projection_8gpu_hours_for_8B": 0.76,
+  "projection_8gpu_usd_for_8B": 24.1,
+  "generations": {
+    "def fibonacci(n):\n": "\t\"\"\"\n\t\"\"\"\n\treturn n\n\ndef fibonacci(n):\n\t\"\"\"\n\t\"\"\"\n\treturn fibonacci(n)\n\ndef fibonacci(n):\n\t\"\"\"\n\t\"\"\"\n\treturn fibonacci(n)\n\ndef fibonacci(n",
+    "SELECT customer_id, SUM(amount) AS total FROM orders GROUP BY": " 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,",
+    "The Company reported that net revenues increased": " to $1,000,000 in 1997, 1997, and 1997, respectively.\nThe Company's net operating loss carryforwards were $1,000,000, $1,00",
+    "import pandas as pd\ndf = pd.read_csv('sales.csv')\n": "df.head()\ndf.info()\n\n# # 1. EDA\n# 2. EDA\n# 3. EDA\n# 4. EDA\n# 4. EDA\n# 4. EDA\n# 4. EDA\n# 4. EDA\n"
+  }
+}

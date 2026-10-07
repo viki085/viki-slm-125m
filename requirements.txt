@@ -1,0 +1,14 @@
+# Local dev / tests
+pytest>=8
+pytest-cov>=5
+modal>=1.0
+
+# Used inside Modal images (pinned there in modal_app.py); listed for local testing
+datasets==3.6.0
+huggingface_hub>=0.34
+pyarrow>=17
+langdetect==1.0.9
+datasketch==1.6.5
+sqlglot>=25
+numpy>=1.26
+boto3>=1.34

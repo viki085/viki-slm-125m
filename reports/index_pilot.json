@@ -1,0 +1,32 @@
+{
+  "seq_len": 2048,
+  "dtype": "uint16",
+  "train_windows": 33483,
+  "val_windows": 339,
+  "train_tokens": 68573184,
+  "val_tokens": 694272,
+  "effective_train_tokens": 68573184,
+  "sources": {
+    "python": {
+      "train_windows": 33483,
+      "val_windows": 339,
+      "epochs": 1.0,
+      "files": 1,
+      "train_tokens": 68573184,
+      "val_tokens": 694272,
+      "effective_train_tokens": 68573184
+    }
+  },
+  "realized_mix": {
+    "python": 1.0
+  },
+  "shards": [
+    {
+      "source": "python",
+      "file": "shard-000-00.jsonl",
+      "train_windows": 33483,
+      "val_windows": 339,
+      "epochs": 1.0
+    }
+  ]
+}

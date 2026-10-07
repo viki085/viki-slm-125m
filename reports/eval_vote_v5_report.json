@@ -1,0 +1,39 @@
+{
+  "checkpoint": "artifacts/sft_v5/best.pt",
+  "samples": 8,
+  "temperature": 0.7,
+  "gretel_unseen_domains": {
+    "k=0": {
+      "execution_accuracy": 0.5733333333333334,
+      "tolerant": 0.5733333333333334,
+      "executes_rate": 0.92
+    },
+    "k=4": {
+      "execution_accuracy": 0.5966666666666667,
+      "tolerant": 0.5966666666666667,
+      "executes_rate": 0.9766666666666667
+    },
+    "k=8": {
+      "execution_accuracy": 0.6016666666666667,
+      "tolerant": 0.6016666666666667,
+      "executes_rate": 0.9816666666666667
+    }
+  },
+  "domain_unseen_templates": {
+    "k=0": {
+      "execution_accuracy": 0.6142857142857143,
+      "tolerant": 0.6666666666666666,
+      "executes_rate": 0.9380952380952381
+    },
+    "k=4": {
+      "execution_accuracy": 0.6142857142857143,
+      "tolerant": 0.6666666666666666,
+      "executes_rate": 0.9380952380952381
+    },
+    "k=8": {
+      "execution_accuracy": 0.6142857142857143,
+      "tolerant": 0.6666666666666666,
+      "executes_rate": 0.9380952380952381
+    }
+  }
+}

@@ -1,0 +1,288 @@
+"""Deterministic, rule-based cleaning chains per data kind (pure functions).
+
+Kinds: "text" (full prose chain), "light" (prose without line filtering, for
+textbooks and math), "code" (Python), "sql", "notebook". See the guide, section 7.2.
+"""
+
+from __future__ import annotations
+
+import ast
+import ipaddress
+import re
+from collections import Counter
+from dataclasses import dataclass
+
+from viki_slm_125m.config import CLEAN
+
+KINDS = ("text", "light", "code", "sql", "notebook")
+
+# ---------------------------------------------------------------- result type
+
+
+@dataclass(frozen=True)
+class CleanResult:
+    kept: bool
+    text: str
+    reason: str
+    raw_chars: int
+    clean_chars: int
+
+
+def _keep(text: str, raw: int) -> CleanResult:
+    return CleanResult(True, text, "kept", raw, len(text))
+
+
+def _drop(reason: str, raw: int, size: int = 0) -> CleanResult:
+    return CleanResult(False, "", reason, raw, size)
+
+
+# ------------------------------------------------------------ PII and secrets
+
+_EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}")
+_IPV4 = re.compile(r"\b(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)\b")
+EMAIL_PLACEHOLDER = "user@example.com"
+IP_PLACEHOLDER = "192.0.2.1"  # documentation range: not global, so redaction is idempotent
+
+_SECRET_PATTERNS = tuple(re.compile(p) for p in (
+    r"-----BEGIN (?:RSA |EC |DSA |OPENSSH |PGP )?PRIVATE KEY",
+    r"\bAKIA[0-9A-Z]{16}\b",
+    r"\bgh[pousr]_[A-Za-z0-9]{36,}\b",
+    r"\bhf_[A-Za-z0-9]{30,}\b",
+    r"\bsk-[A-Za-z0-9]{32,}\b",
+    r"\bxox[baprs]-[A-Za-z0-9-]{10,}\b",
+    r"\bAIza[0-9A-Za-z_-]{35}\b",
+))
+
+
+def _redact_ip(match: re.Match[str]) -> str:
+    try:
+        return IP_PLACEHOLDER if ipaddress.ip_address(match.group(0)).is_global else match.group(0)
+    except ValueError:
+        return match.group(0)
+
+
+def redact_pii(text: str) -> str:
+    """Replace emails and public IPv4 addresses with documentation placeholders."""
+    return _IPV4.sub(_redact_ip, _EMAIL.sub(EMAIL_PLACEHOLDER, text))
+
+
+def has_secret(text: str) -> bool:
+    return any(p.search(text) for p in _SECRET_PATTERNS)
+
+
+# ---------------------------------------------------------------- prose chain
+
+_BOILERPLATE = tuple(re.compile(p, re.IGNORECASE) for p in (
+    r"^\s*form\s+10[-\s]?[kq]\b.*$",
+    r"^\s*page\s+\d+\s+of\s+\d+\s*$",
+    r"^\s*table\s+of\s+contents\s*$",
+    r"^\s*/s/\s*.*$",
+    r"^\s*all\s+rights\s+reserved.*$",
+    r"^\s*united\s+states\s+securities\s+and\s+exchange\s+commission\s*$",
+    r"^\s*securities\s+and\s+exchange\s+commission\s*$",
+    r"^\s*washington,?\s+d\.?\s?c\.?\s+\d{5}\s*$",
+    r"^\s*\[?\s*x\s*\]?\s*$",
+))
+_WS = re.compile(r"\s+")
+_ALNUM = re.compile(r"[A-Za-z0-9]")
+
+
+def _nonalnum_ratio(line: str) -> float:
+    if not line:
+        return 1.0
+    return 1.0 - sum(1 for c in line if _ALNUM.match(c)) / len(line)
+
+
+def filter_lines(text: str) -> str:
+    out: list[str] = []
+    for raw in text.splitlines():
+        line = _WS.sub(" ", raw).strip()
+        if len(line) < CLEAN.min_line_chars or _nonalnum_ratio(line) > CLEAN.max_nonalnum_ratio:
+            continue
+        out.append(line)
+    return "\n".join(out)
+
+
+def strip_boilerplate(text: str) -> str:
+    return "\n".join(
+        line for line in text.splitlines() if not any(p.match(line) for p in _BOILERPLATE))
+
+
+def is_repetitive(text: str) -> bool:
+    words = text.split()
+    n = CLEAN.ngram_n
+    if len(words) < n * 2:
+        return False
+    grams = [tuple(words[i:i + n]) for i in range(len(words) - n + 1)]
+    top = sum(c for _, c in Counter(grams).most_common(CLEAN.repetition_top_k))
+    return top / len(grams) > CLEAN.max_repetition_ratio
+
+
+def _ascii_ratio(text: str) -> float:
+    return sum(1 for c in text if ord(c) < 128) / len(text) if text else 0.0
+
+
+def is_english(text: str) -> bool:
+    """ASCII ratio first; langdetect only for the ambiguous 90-99% band."""
+    sample = text[:CLEAN.lang_sample_chars]
+    ratio = _ascii_ratio(sample)
+    if ratio >= 0.99:
+        return True
+    if ratio < 0.90:
+        return False
+    try:
+        from langdetect import DetectorFactory, detect
+
+        DetectorFactory.seed = 0
+        return detect(sample) == "en"
+    except Exception:  # langdetect missing or undecidable: fall back to the ratio
+        return ratio > 0.95
+
+
+def _clean_prose(text: str, raw: int, *, light: bool) -> CleanResult:
+    body = text.strip() if light else strip_boilerplate(filter_lines(text))
+    if len(body) < CLEAN.min_doc_chars:
+        return _drop("too_short", raw, len(body))
+    if is_repetitive(body):
+        return _drop("repetitive", raw, len(body))
+    if not is_english(body):
+        return _drop("non_english", raw, len(body))
+    return _keep(redact_pii(body), raw)
+
+
+# ----------------------------------------------------------------- code chain
+
+_NBCONVERT_CELL = re.compile(r"^# In\[[ \d]*\]:", re.MULTILINE)
+_AUTOGEN = re.compile(
+    r"auto[- ]?generated|generated by|do not edit|@generated|this file was generated",
+    re.IGNORECASE)
+
+
+def _line_stats(text: str) -> tuple[float, int]:
+    lines = text.splitlines() or [""]
+    lengths = [len(line) for line in lines]
+    return sum(lengths) / len(lengths), max(lengths)
+
+
+def _alnum_fraction(text: str) -> float:
+    return sum(1 for c in text if c.isalnum()) / len(text) if text else 0.0
+
+
+def _comment_fraction(text: str, marker: str) -> float:
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    if not lines:
+        return 1.0
+    return sum(1 for ln in lines if ln.startswith(marker)) / len(lines)
+
+
+def _code_size_gate(text: str, raw: int) -> CleanResult | None:
+    if len(text) < CLEAN.code_min_chars:
+        return _drop("too_short", raw, len(text))
+    if len(text) > CLEAN.code_max_chars:
+        return _drop("too_long", raw, len(text))
+    if has_secret(text):
+        return _drop("secret", raw, len(text))
+    return None
+
+
+def _clean_python(text: str, raw: int) -> CleanResult:
+    gate = _code_size_gate(text, raw)
+    if gate:
+        return gate
+    if _AUTOGEN.search("\n".join(text.splitlines()[:5])):
+        return _drop("autogenerated", raw, len(text))
+    avg_line, max_line = _line_stats(text)
+    if avg_line > CLEAN.code_max_avg_line or max_line > CLEAN.code_max_line:
+        return _drop("long_lines", raw, len(text))
+    if _alnum_fraction(text) < CLEAN.code_min_alnum_frac:
+        return _drop("low_alnum", raw, len(text))
+    exported_notebook = _NBCONVERT_CELL.search(text) is not None  # markdown cells become comments
+    if not exported_notebook and _comment_fraction(text, "#") > CLEAN.code_max_comment_frac:
+        return _drop("comment_heavy", raw, len(text))
+    try:
+        ast.parse(text)
+    except (SyntaxError, ValueError, RecursionError, MemoryError):
+        return _drop("syntax_error", raw, len(text))
+    return _keep(redact_pii(text), raw)
+
+
+# ------------------------------------------------------------------ sql chain
+
+_INSERT = re.compile(r"^\s*insert\s+into\b", re.IGNORECASE | re.MULTILINE)
+_SQL_PARSE_CHARS = 20_000
+_SQL_DIALECTS = (None, "mysql", "tsql", "postgres")
+
+
+def _is_data_dump(text: str) -> bool:
+    inserts = list(_INSERT.finditer(text))
+    if len(inserts) <= CLEAN.sql_max_insert_rows:
+        return False
+    insert_lines = sum(1 for ln in text.splitlines() if _INSERT.match(ln))
+    return insert_lines / max(1, len(text.splitlines())) > 0.5
+
+
+def _sql_parses(text: str) -> bool:
+    import sqlglot
+    from sqlglot.errors import SqlglotError
+
+    head = text[:_SQL_PARSE_CHARS]
+    cut = head.rfind(";")
+    head = head[:cut + 1] if cut > 0 and len(text) > _SQL_PARSE_CHARS else head
+    for dialect in _SQL_DIALECTS:
+        try:
+            if sqlglot.parse(head, read=dialect):
+                return True
+        except SqlglotError:
+            continue
+        except Exception:  # sqlglot dialect bugs (AttributeError etc.) on odd input: treat as unparseable
+            continue
+    return False
+
+
+def _clean_sql(text: str, raw: int) -> CleanResult:
+    gate = _code_size_gate(text, raw)
+    if gate:
+        return gate
+    if _is_data_dump(text):
+        return _drop("data_dump", raw, len(text))
+    _, max_line = _line_stats(text)
+    if max_line > CLEAN.code_max_line * 5:
+        return _drop("long_lines", raw, len(text))
+    if not _sql_parses(text):
+        return _drop("parse_error", raw, len(text))
+    return _keep(redact_pii(text), raw)
+
+
+# ------------------------------------------------------------- notebook chain
+
+_IMG_BLOB = re.compile(r"data:image/[A-Za-z0-9.+-]+;base64,[A-Za-z0-9+/=\s]+")
+_NB_MAX_LINE = 5_000
+
+
+def _clean_notebook(text: str, raw: int) -> CleanResult:
+    text = _IMG_BLOB.sub("<image>", text)
+    text = "\n".join(ln for ln in text.splitlines() if len(ln) <= _NB_MAX_LINE).strip()
+    if len(text) < CLEAN.code_min_chars:
+        return _drop("too_short", raw, len(text))
+    if has_secret(text):
+        return _drop("secret", raw, len(text))
+    if _alnum_fraction(text) < CLEAN.code_min_alnum_frac:
+        return _drop("low_alnum", raw, len(text))
+    return _keep(redact_pii(text), raw)
+
+
+# ------------------------------------------------------------------- dispatch
+
+
+def clean_document(text: str, kind: str) -> CleanResult:
+    """Run one document through the chain for its kind."""
+    if kind not in KINDS:
+        raise ValueError(f"unknown kind {kind!r}; expected one of {KINDS}")
+    raw = len(text)
+    if kind == "code":
+        return _clean_python(text, raw)
+    if kind == "sql":
+        return _clean_sql(text, raw)
+    if kind == "notebook":
+        return _clean_notebook(text, raw)
+    return _clean_prose(text, raw, light=(kind == "light"))

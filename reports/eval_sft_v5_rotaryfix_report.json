@@ -1,0 +1,235 @@
+{
+  "checkpoint": "artifacts/sft_v5/best.pt",
+  "domain_unseen_templates": {
+    "n": 420,
+    "execution_accuracy": 0.6142857142857143,
+    "execution_accuracy_tolerant": 0.6666666666666666,
+    "executes_rate": 0.9380952380952381,
+    "format_rate": 1.0,
+    "insight_format_rate": 1.0,
+    "faithful_rate": 0.9949238578680203
+  },
+  "gretel_unseen_domains": {
+    "n": 600,
+    "execution_accuracy": 0.58,
+    "execution_accuracy_tolerant": 0.58,
+    "executes_rate": 0.9233333333333333,
+    "format_rate": 1.0,
+    "insight_format_rate": 1.0,
+    "faithful_rate": 0.9945848375451264
+  },
+  "domain_by_template": {
+    "sc_monthly_orders": {
+      "n": 60,
+      "execution_accuracy": 1.0,
+      "execution_accuracy_tolerant": 1.0,
+      "executes_rate": 1.0,
+      "format_rate": 1.0,
+      "insight_format_rate": 1.0,
+      "faithful_rate": 1.0
+    },
+    "sc_avg_po_value_country": {
+      "n": 60,
+      "execution_accuracy": 1.0,
+      "execution_accuracy_tolerant": 1.0,
+      "executes_rate": 1.0,
+      "format_rate": 1.0,
+      "insight_format_rate": 1.0,
+      "faithful_rate": 1.0
+    },
+    "fin_late_rate_segment": {
+      "n": 60,
+      "execution_accuracy": 1.0,
+      "execution_accuracy_tolerant": 1.0,
+      "executes_rate": 1.0,
+      "format_rate": 1.0,
+      "insight_format_rate": 1.0,
+      "faithful_rate": 1.0
+    },
+    "fin_balance_country": {
+      "n": 60,
+      "execution_accuracy": 0.5666666666666667,
+      "execution_accuracy_tolerant": 0.5666666666666667,
+      "executes_rate": 0.5666666666666667,
+      "format_rate": 1.0,
+      "insight_format_rate": 1.0,
+      "faithful_rate": 0.9705882352941176
+    },
+    "sc_shortest_lead": {
+      "n": 60,
+      "execution_accuracy": 0.15,
+      "execution_accuracy_tolerant": 0.15,
+      "executes_rate": 1.0,
+      "format_rate": 1.0,
+      "insight_format_rate": 1.0,
+      "faithful_rate": 1.0
+    },
+    "fin_lowest_rate_loans": {
+      "n": 60,
+      "execution_accuracy": 0.0,
+      "execution_accuracy_tolerant": 0.0,
+      "executes_rate": 1.0,
+      "format_rate": 1.0,
+      "insight_format_rate": 1.0,
+      "faithful_rate": 0.9833333333333333
+    },
+    "sc_avg_capacity": {
+      "n": 60,
+      "execution_accuracy": 0.5833333333333334,
+      "execution_accuracy_tolerant": 0.95,
+      "executes_rate": 1.0,
+      "format_rate": 1.0,
+      "insight_format_rate": 1.0,
+      "faithful_rate": 1.0
+    }
+  },
+  "behaviour": {
+    "refusal": {
+      "n": 40,
+      "no_sql_and_insight": 1.0,
+      "expected_wording": 1.0,
+      "sample": "<|insight|>\nI can only run read-only SELECT queries, so I can't change or delete data in warehouses. I can help you analyze it instead, for example by counting or summarizing the rows in warehouses.\n<|/insight|><|eos|>"
+    },
+    "missing_info": {
+      "n": 40,
+      "no_sql_and_insight": 1.0,
+      "expected_wording": 1.0,
+      "sample": "<|insight|>\nI can't answer that from this schema because it has no data about employee headcount per warehouse. The available tables are suppliers, products, warehouses, inventory, purchase_orders, shipments, demand_forecast. If you can point me to the right table or share its schema, I can write the query.\n<|/insight|><|eos|>"
+    },
+    "clarification": {
+      "n": 40,
+      "no_sql_and_insight": 1.0,
+      "expected_wording": 1.0,
+      "sample": "<|insight|>\nCould you clarify what you mean by \"sells the most\"? I can use highest ordered quantity or highest total spend. Tell me which one you want and I will run the query.\n<|/insight|><|eos|>"
+    }
+  },
+  "behaviour_unseen_schemas": {
+    "refusal": {
+      "n": 100,
+      "correct": 1.0,
+      "wrote_sql_instead": 0.0
+    },
+    "missing": {
+      "n": 100,
+      "correct": 1.0,
+      "wrote_sql_instead": 0.0
+    },
+    "clarify": {
+      "n": 100,
+      "correct": 1.0,
+      "wrote_sql_instead": 0.0
+    }
+  },
+  "custom_prompts": [
+    {
+      "question": "What is the average salary by department?",
+      "output": "<|think|>\nPlan: read from employees; aggregate with AVG; group the results.\n<|/think|>\n<|sql|>\nSELECT department, AVG(salary) FROM employees GROUP BY department\n<|/sql|>"
+    },
+    {
+      "question": "Which customers placed more than 3 orders?",
+      "output": "<|think|>\nPlan: read from customers, orders; join the tables; filter rows with WHERE; aggregate with COUNT; group the results.\n<|/think|>\n<|sql|>\nSELECT c.name, COUNT(o.id) as orders_count FROM customers c JOIN orders o ON c.id = o.customer_id WHERE o.total > 3 GROUP BY c.name\n<|/sql|>"
+    },
+    {
+      "question": "Delete all employees from the Sales department.",
+      "output": "<|insight|>\nI can only run read-only SELECT queries, so I can't delete data from employees. I can help you analyze the existing data instead, for example by counting or summarizing the rows in employees.\n<|/insight|><|eos|>"
+    },
+    {
+      "question": "Who is our best employee?",
+      "output": "<|insight|>\nCould you clarify what you mean by \"best\"? I can rank employee by salary or hire date. Tell me which one you want and I will run the query.\n<|/insight|><|eos|>"
+    },
+    {
+      "question": "Which SKUs need to be reordered in each warehouse?",
+      "output": "<|think|>\nPlan: read from inventory; aggregate with NTILE; sort the results.\n<|/think|>\n<|sql|>\nSELECT warehouse, NTILE(3) OVER (ORDER BY quantity) as warehouse_order FROM inventory\n<|/sql|>"
+    }
+  ],
+  "samples": {
+    "domain": [
+      {
+        "id": "sc_monthly_orders-900000",
+        "domain": "supply_chain",
+        "template": "sc_monthly_orders",
+        "question": "Can you tell me show the monthly count of purchase orders for 2024.",
+        "pred_sql": "SELECT strftime('%Y-%m', order_date) AS month, COUNT(*) AS po_count FROM purchase_orders WHERE strftime('%Y', order_date) = '2024' GROUP BY month ORDER BY month",
+        "gold_sql": "SELECT strftime('%Y-%m', order_date) AS month, COUNT(*) AS orders FROM purchase_orders WHERE strftime('%Y', order_date) = '2024' GROUP BY month ORDER BY month",
+        "status": "match",
+        "detail": "",
+        "format_ok": true,
+        "insight_ok": true,
+        "faithful": true,
+        "insight": "The query returned 11 rows; only the first 10 are shown. po_count is highest for 2024-02 (4) and lowest for 2024-03 (3)."
+      },
+      {
+        "id": "sc_monthly_orders-900001",
+        "domain": "supply_chain",
+        "template": "sc_monthly_orders",
+        "question": "How many purchase orders were placed each month in 2024?",
+        "pred_sql": "SELECT strftime('%Y-%m', order_date) AS month, COUNT(*) AS orders FROM purchase_orders WHERE strftime('%Y', order_date) = '2024' GROUP BY month ORDER BY month",
+        "gold_sql": "SELECT strftime('%Y-%m', order_date) AS month, COUNT(*) AS orders FROM purchase_orders WHERE strftime('%Y', order_date) = '2024' GROUP BY month ORDER BY month",
+        "status": "match",
+        "detail": "",
+        "format_ok": true,
+        "insight_ok": true,
+        "faithful": true,
+        "insight": "The query returned 11 rows; only the first 10 are shown. orders is highest for 2024-01 (3) and lowest for 2024-03 (1)."
+      },
+      {
+        "id": "sc_monthly_orders-900002",
+        "domain": "supply_chain",
+        "template": "sc_monthly_orders",
+        "question": "Could you work out show the monthly count of purchase orders for 2023.",
+        "pred_sql": "SELECT strftime('%Y-%m', order_date) AS month, COUNT(*) AS po_count FROM purchase_orders WHERE strftime('%Y', order_date) = '2023' GROUP BY month ORDER BY month",
+        "gold_sql": "SELECT strftime('%Y-%m', order_date) AS month, COUNT(*) AS orders FROM purchase_orders WHERE strftime('%Y', order_date) = '2023' GROUP BY month ORDER BY month",
+        "status": "match",
+        "detail": "",
+        "format_ok": true,
+        "insight_ok": true,
+        "faithful": true,
+        "insight": "The query returned 12 rows; only the first 10 are shown. po_count is highest for 2023-02 (4) and lowest for 2023-03 (6)."
+      }
+    ],
+    "gretel": [
+      {
+        "id": "5326",
+        "domain": "rural development",
+        "template": null,
+        "question": "What was the total economic diversification investment in Nigeria in 2019?",
+        "pred_sql": "SELECT SUM(investment) FROM economic_diversification WHERE country = 'Nigeria' AND year = 2019",
+        "gold_sql": "SELECT SUM(investment) FROM economic_diversification WHERE country = 'Nigeria' AND year = 2019;",
+        "status": "match",
+        "detail": "",
+        "format_ok": true,
+        "insight_ok": true,
+        "faithful": true,
+        "insight": "The result is 1200000."
+      },
+      {
+        "id": "5488",
+        "domain": "arts and culture",
+        "template": null,
+        "question": "What is the average donation amount by continent?",
+        "pred_sql": "SELECT continent, AVG(donation_amount) FROM Donors GROUP BY continent",
+        "gold_sql": "SELECT continent, AVG(donation_amount) FROM Donors GROUP BY continent;",
+        "status": "match",
+        "detail": "",
+        "format_ok": true,
+        "insight_ok": true,
+        "faithful": true,
+        "insight": "The query returned 3 rows. AVG(donation_amount) is highest for Asia (80) and lowest for Africa (50)."
+      },
+      {
+        "id": "5506",
+        "domain": "rural development",
+        "template": null,
+        "question": "What is the name of the community development initiative with the most participants in the 'community_development' table?;",
+        "pred_sql": "SELECT initiative_name FROM community_development WHERE number_of_participants = (SELECT MAX(number_of_participants) FROM community_development)",
+        "gold_sql": "SELECT initiative_name FROM community_development WHERE number_of_participants = (SELECT MAX(number_of_participants) FROM community_development);",
+        "status": "match",
+        "detail": "",
+        "format_ok": true,
+        "insight_ok": true,
+        "faithful": true,
+        "insight": "The result is Environmental Conservation."
+      }
+    ]
+  }
+}
